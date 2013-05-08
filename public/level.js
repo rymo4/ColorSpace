@@ -10,3 +10,5 @@ CS.level1.platforms = [
   {x: 5, y: -10},
   {x: 6, y: -10}
 ];
+
+CS.level1.meshes = [];
