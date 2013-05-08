@@ -1,0 +1,39 @@
+!!!
+%html
+  %head
+    %script{type: 'text/javascript', src: 'jquery.min.js'}
+    %script{type: 'text/javascript', src: 'three.js'}
+    %script{type: 'text/javascript', src: 'game.js'}
+    %link{rel: 'stylesheet', href: 'styles.css'}
+  %body
+    %h1 Three JS Test
+    #container
+  %script{type: "x-shader/x-vertex", id: "vertexshader"}
+    :plain
+      #ifdef GL_ES
+        precision highp float;
+      #endif
+
+      varying vec3 vNormal;
+
+      void main() {
+        vNormal = normal;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+      }
+  %script{type: "x-shader/x-fragment", id: "fragmentshader"}
+    :plain
+      #ifdef GL_ES
+        precision highp float;
+      #endif
+
+      varying vec3 vNormal;
+      void main() {
+        vec3 light = vec3(0.5,0.2,1.0);
+        light = normalize(light);
+        float dProd = max(0.0, dot(vNormal, 0.4*light));
+        float dProd2 = max(0.0, dot(vNormal, 1.5*light));
+        gl_FragColor = vec4(dProd, // R
+                            dProd2, // G
+                            dProd, // B
+                            1.0);  // A
+      }
