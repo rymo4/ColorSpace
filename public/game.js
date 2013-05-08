@@ -1,7 +1,9 @@
-$(document).ready(function(){
+CS = { };
+
+CS.init = function(){
   // set the scene size
-  var WIDTH = 800,
-    HEIGHT = 500;
+  var WIDTH = window.innerWidth,
+    HEIGHT = window.innerHeight;
 
   // set some camera attributes
   var VIEW_ANGLE = 45,
@@ -15,8 +17,8 @@ $(document).ready(function(){
 
   // create a WebGL renderer, camera
   // and a scene
-  var renderer = new THREE.WebGLRenderer();
-  var camera =
+  CS.renderer = new THREE.WebGLRenderer();
+  CS.camera =
     new THREE.PerspectiveCamera(
       VIEW_ANGLE,
       ASPECT,
@@ -26,19 +28,19 @@ $(document).ready(function(){
   var scene = new THREE.Scene();
 
   // add the camera to the scene
-  scene.add(camera);
+  scene.add(CS.camera);
 
   // the camera starts at 0,0,0
   // so pull it back
-  camera.position.x = 50;
-  camera.position.y = 10;
-  camera.position.z = 350;
+  CS.camera.position.x = 50;
+  CS.camera.position.y = 10;
+  CS.camera.position.z = 350;
 
   // start the renderer
-  renderer.setSize(WIDTH, HEIGHT);
+  CS.renderer.setSize(WIDTH, HEIGHT);
 
   // attach the render-supplied DOM element
-  $container.append(renderer.domElement);
+  $container.append(CS.renderer.domElement);
   var vShader = $('#vertexshader');
   var fShader = $('#fragmentshader');
 
@@ -71,5 +73,35 @@ $(document).ready(function(){
   // add to the scene
   scene.add(pointLight);
   // draw!
-  renderer.render(scene, camera);
-});
+  CS.renderer.render(scene, CS.camera);
+};
+
+CS.start = function(){
+  CS.animate();
+};
+
+CS.animate = function() {
+  var time = Date.now();
+
+  CS.frameTime = time - CS._lastFrameTime;
+  CS._lastFrameTime = time;
+  CS.cumulatedFrameTime += CS.frameTime;
+
+  while (CS.cumulatedFrameTime > CS.gameStepTime) {
+    // movement will go here
+    CS.cumulatedFrameTime -= CS.gameStepTime;
+  }
+
+  CS.renderer.render(CS.scene, CS.camera);
+  CS.stats.update();
+  if(!CS.gameOver) window.requestAnimationFrame(CS.animate);
+}
+CS.gameStepTime = 1000;
+
+CS.frameTime = 0; // ms
+CS.cumulatedFrameTime = 0; // ms
+CS._lastFrameTime = Date.now(); // timestamp
+
+CS.gameOver = false;
+
+window.addEventListener("load", CS.init);
