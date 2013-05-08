@@ -1,4 +1,4 @@
-CS = { };
+window.CS = window.CS || { };
 
 CS.init = function(){
   // set the scene size
@@ -25,10 +25,10 @@ CS.init = function(){
       NEAR,
       FAR);
 
-  var scene = new THREE.Scene();
+  CS.scene = new THREE.Scene();
 
   // add the camera to the scene
-  scene.add(CS.camera);
+  CS.scene.add(CS.camera);
 
   // the camera starts at 0,0,0
   // so pull it back
@@ -49,18 +49,22 @@ CS.init = function(){
       vertexShader:   vShader.text(),
       fragmentShader: fShader.text()
     });
-  for (var i = 0; i < 40; i++){
-    var cube_width = 10;
-    var cube = new THREE.Mesh(new THREE.CubeGeometry(cube_width, cube_width, 5, 5, 5, 5), shaderMaterial);
-    cube.position.x = -150 + cube_width*i;
-    cube.position.y = -100;
-    scene.add(cube);
+
+  for (var i = 0; i < CS.level1.platforms.length; i++){
+    var platform = CS.level1.platforms[i];
+    var cube = new THREE.Mesh(new THREE.CubeGeometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), shaderMaterial);
+    cube.position.x = platform.x*CS.UNIT;
+    cube.position.y = platform.y*CS.UNIT;
+    CS.scene.add(cube);
   }
 
   // create the sphere's material
   var mainMaterial = new THREE.MeshFaceMaterial({color: 0xCC0000});
-  var sphere = new THREE.Mesh( new THREE.SphereGeometry(10,50,50), shaderMaterial);
-  scene.add(sphere);
+  CS.player.mesh = new THREE.Mesh( new CS.player.geometry(10,50,50), shaderMaterial);
+  CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
+  CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
+  CS.player.mesh.position.z = CS.player.position.z * CS.UNIT;
+  CS.scene.add(CS.player.mesh);
   // create a point light
   var pointLight =
     new THREE.PointLight(0xFFFFFF);
@@ -71,9 +75,10 @@ CS.init = function(){
   pointLight.position.z = 130;
 
   // add to the scene
-  scene.add(pointLight);
+  CS.scene.add(pointLight);
   // draw!
-  CS.renderer.render(scene, CS.camera);
+  CS.renderer.render(CS.scene, CS.camera);
+  CS.start();
 };
 
 CS.start = function(){
@@ -90,18 +95,21 @@ CS.animate = function() {
   while (CS.cumulatedFrameTime > CS.gameStepTime) {
     // movement will go here
     CS.cumulatedFrameTime -= CS.gameStepTime;
+    CS.player.move(0,-1,0);
   }
 
   CS.renderer.render(CS.scene, CS.camera);
-  CS.stats.update();
+  //CS.stats.update();
   if(!CS.gameOver) window.requestAnimationFrame(CS.animate);
 }
-CS.gameStepTime = 1000;
+CS.gameStepTime = 50;
 
 CS.frameTime = 0; // ms
 CS.cumulatedFrameTime = 0; // ms
 CS._lastFrameTime = Date.now(); // timestamp
 
 CS.gameOver = false;
+
+CS.UNIT = 10;
 
 window.addEventListener("load", CS.init);
