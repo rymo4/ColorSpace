@@ -6,6 +6,13 @@ CS.player.geometry = THREE.SphereGeometry;
 CS.player.position = {x: 0, y: -2, z: 0};
 CS.player.direction = {x: 0, y: -1, z: 0};
 CS.player.move = function(){
+
+
+  var stop = function(){CS.player.direction.x = 0}
+  KeyboardJS.on('d', function(){ CS.player.direction.x = 1 }, stop)
+  KeyboardJS.on('a', function(){ CS.player.direction.x = -1 }, stop)
+
+
   var x = CS.player.direction.x,
       y = CS.player.direction.y
       z = CS.player.direction.z;

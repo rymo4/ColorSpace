@@ -11,6 +11,13 @@ CS.init = function(){
     NEAR = 0.1,
     FAR = 10000;
 
+  CS.stats = new Stats();
+  CS.stats.setMode(0);
+  CS.stats.domElement.style.position = 'absolute';
+  CS.stats.domElement.style.left = '0px';
+  CS.stats.domElement.style.top = '0px';
+  document.body.appendChild(CS.stats.domElement);
+
   // get the DOM element to attach to
   // - assume we've got jQuery to hand
   var $container = $('#container');
@@ -99,9 +106,8 @@ CS.animate = function() {
     CS.player.move();
     CS.player.collision();
   }
-
+  CS.stats.update();
   CS.renderer.render(CS.scene, CS.camera);
-  //CS.stats.update();
   if(!CS.gameOver) window.requestAnimationFrame(CS.animate);
 }
 CS.gameStepTime = 50;
