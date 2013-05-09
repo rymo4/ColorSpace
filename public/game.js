@@ -93,6 +93,8 @@ CS.start = function(){
   CS.animate();
 };
 
+CS.gravity = 0.01;
+
 CS.animate = function() {
   var time = Date.now();
 

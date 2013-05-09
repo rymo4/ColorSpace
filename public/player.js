@@ -3,15 +3,26 @@ CS.player = CS.player || {};
 
 CS.player.material = THREE.MeshFaceMaterial;//({color: 0xCC0000});
 CS.player.geometry = THREE.SphereGeometry;
-CS.player.position = {x: 0, y: -2, z: 0};
-CS.player.direction = {x: 0, y: -1, z: 0};
+CS.player.position = {x: 0, y: -8.5, z: 0};
+CS.player.direction = {x: 0, y: 0, z: 0};
+CS.player.weight = 10;
+CS.player.handleKeys = function(){
+  var stop = function(){CS.player.direction.x = 0 };
+  KeyboardJS.on('d', function(){ CS.player.direction.x = 1; }, stop);
+  KeyboardJS.on('a', function(){ CS.player.direction.x = -1; }, stop);
+  KeyboardJS.on('w', function(){
+    if (CS.player.direction.y === 0){
+      CS.player.direction.y = 1;
+    }
+  }, stop);
+};
+
+CS.player.fall = function(){
+  this.direction.y -= this.weight * CS.gravity;
+};
+
 CS.player.move = function(){
-
-
-  var stop = function(){CS.player.direction.x = 0}
-  KeyboardJS.on('d', function(){ CS.player.direction.x = 1 }, stop)
-  KeyboardJS.on('a', function(){ CS.player.direction.x = -1 }, stop)
-
+  CS.player.handleKeys();
 
   var x = CS.player.direction.x,
       y = CS.player.direction.y
@@ -40,15 +51,28 @@ CS.player.rays = [
 CS.player.caster = new THREE.Raycaster();
 
 CS.player.collision = function () {
+  var RIGHT = 0,
+      UP = 1,
+      LEFT = 2,
+      DOWN = 3;
   var collisions, i,
-  distance = CS.UNIT,
-  obstacles = CS.level1.meshes;
+      distance = CS.UNIT,
+      obstacles = CS.level1.meshes;
+  var any_collisions = false;
   for (i = 0; i < this.rays.length; i += 1) {
     this.caster.set(this.mesh.position, this.rays[i]);
     collisions = this.caster.intersectObjects(obstacles);
     if (collisions.length > 0 && collisions[0].distance <= distance) {
-      this.direction.y *= -1;
+      any_collisions = true;
+      if (i == DOWN){ this.direction.y = 0; }
+      else if (i == UP){ this.direction.y *= -1; }
+      else if (i == UP){ this.direction.y *= -1; }
+      else {this.direction.x = 0; }
       // TODO: use this.rays to change the direction correctly
     }
+  }
+  if (!any_collisions){
+    CS.player.isFalling = true;
+    CS.player.fall();
   }
 }
