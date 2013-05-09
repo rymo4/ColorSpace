@@ -24,6 +24,8 @@ CS.player.fall = function(){
 CS.player.move = function(){
   CS.player.handleKeys();
 
+  if (CS.player.inAir){ CS.player.fall(); }
+
   var x = CS.player.direction.x,
       y = CS.player.direction.y
       z = CS.player.direction.z;
@@ -64,6 +66,7 @@ CS.player.collision = function () {
     collisions = this.caster.intersectObjects(obstacles);
     if (collisions.length > 0 && collisions[0].distance <= distance) {
       any_collisions = true;
+      CS.player.inAir = false;
       if (i == DOWN){ this.direction.y = 0; }
       else if (i == UP){ this.direction.y *= -1; }
       else if (i == UP){ this.direction.y *= -1; }
@@ -72,7 +75,6 @@ CS.player.collision = function () {
     }
   }
   if (!any_collisions){
-    CS.player.isFalling = true;
-    CS.player.fall();
+    CS.player.inAir = true;
   }
 }
