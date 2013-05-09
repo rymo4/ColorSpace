@@ -59,6 +59,8 @@ $(document).ready(function(){
   var mainMaterial = new THREE.MeshFaceMaterial({color: 0xCC0000});
   var sphere = new THREE.Mesh( new THREE.SphereGeometry(10,50,50), shaderMaterial);
   scene.add(sphere);
+
+
   // create a point light
   var pointLight =
     new THREE.PointLight(0xFFFFFF);
