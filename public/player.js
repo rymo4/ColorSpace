@@ -12,7 +12,7 @@ CS.player.handleKeys = function(){
   KeyboardJS.on('a', function(){ CS.player.direction.x = -1; }, stop);
   KeyboardJS.on('w', function(){
     if (CS.player.direction.y === 0){
-      CS.player.direction.y = 1;
+      CS.player.direction.y = 7;
     }
   }, stop);
 };
@@ -69,8 +69,7 @@ CS.player.collision = function () {
       CS.player.inAir = false;
       if (i == DOWN){ this.direction.y = 0; }
       else if (i == UP){ this.direction.y *= -1; }
-      else if (i == UP){ this.direction.y *= -1; }
-      else {this.direction.x = 0; }
+      else {this.direction.x *= -1; }
       // TODO: use this.rays to change the direction correctly
     }
   }
