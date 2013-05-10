@@ -74,6 +74,39 @@ CS.level1.tree = function(base_x, base_y){
   return a;
 };
 
+CS.level1.makeKeep = function(x, y){
+  var keep = [
+    "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]          ]]]]]]]]]]]]]",
+    "]                                                               ]",
+    "]                                                               ]",
+    "]                                                               ]",
+    "]                                                               ]",
+    "]  ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]                       ]",
+    "]  ]     ]                         ]                            ]",
+    "]  ]     ]                         ]       ]       ]            ]",
+    "]        ]                         ]                            ]",
+    "]        ]                         ]                         ]]]]",
+    "]]]]]]]]]]                         ]                            ]",
+    "]                                  ]]                           ]",
+    "]                                  ]             ]]             ]",
+    "]       ]]]]]]                                                  ]",
+    "]       ]                                                       ]",
+    "]       ]       ]            ]]]           ]]]                  ]",
+    "]       ]       ]                                               ]",
+    "    ]]]]]       ]  ]                                            ]",
+    "    ]           ]  ]]]   ]]]]]       ]                          ]",
+    "    ]           ]        ]                                      ]",
+    "                ]        ]                                      ]",
+    "                ]        ]                                      ]",
+    "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]"
+  ].reverse();
+  for (var i = 0; i < keep.length; i += 1){
+    for (var j = 0; j < keep[0].length; j += 1){
+      if (keep[i][j] === ']') CS.level1.platforms.push({x: x + j, y: y + i});
+    }
+  }
+};
+
 CS.level1.create = function(){
   // 100 units of trees in both directions
   var max_mountain_dist = 100;
@@ -90,7 +123,7 @@ CS.level1.create = function(){
   }
   // Mountain
   var max_mountain_height = 40;
-  var min_mountain_height = 10;
+  var min_mountain_height = 15;
   var mountain_height = Math.floor(Math.random() * (max_mountain_height - min_mountain_height)) + min_mountain_height;
   for (var i = mountain_start ; i < mountain_start + mountain_height; i += 1){
     for (var j = 0; j < i - mountain_start; j += 1){
@@ -101,6 +134,7 @@ CS.level1.create = function(){
       }
     }
   }
+  CS.level1.makeKeep(mountain_start + mountain_height, mountain_height - 17);
 };
 
 CS.level1.meshes = [];
