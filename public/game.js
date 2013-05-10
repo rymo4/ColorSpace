@@ -52,15 +52,11 @@ CS.init = function(){
   var vShader = $('#vertexshader');
   var fShader = $('#fragmentshader');
 
-  var shaderMaterial =
-    new THREE.ShaderMaterial({
-      vertexShader:   vShader.text(),
-      fragmentShader: fShader.text()
-    });
+  CS.shaderMaterial = CS.Shaders.fader;
 
   for (var i = 0; i < CS.level1.platforms.length; i++){
     var platform = CS.level1.platforms[i];
-    var cube = new THREE.Mesh(new THREE.CubeGeometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), shaderMaterial);
+    var cube = new THREE.Mesh(new THREE.CubeGeometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), CS.Shaders.standard);
     cube.position.x = platform.x*CS.UNIT;
     cube.position.y = platform.y*CS.UNIT;
     CS.level1.meshes.push(cube);
@@ -69,7 +65,7 @@ CS.init = function(){
 
   // create the sphere's material
   var mainMaterial = new THREE.MeshFaceMaterial({color: 0xCC0000});
-  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), shaderMaterial);
+  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), CS.shaderMaterial);
   CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
   CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
   CS.player.mesh.position.z = CS.player.position.z * CS.UNIT;
@@ -96,12 +92,14 @@ CS.start = function(){
 
 CS.gravity = 0.05;
 
+var start = Date.now();
 CS.animate = function() {
   var time = Date.now();
 
   CS.frameTime = time - CS._lastFrameTime;
   CS._lastFrameTime = time;
   CS.cumulatedFrameTime += CS.frameTime;
+  CS.shaderMaterial.uniforms['time'].value = .0025 * ( Date.now() - start )
 
   while (CS.cumulatedFrameTime > CS.gameStepTime) {
     // movement will go here

@@ -92,7 +92,10 @@ CS.player.handleKeys = function(){
 
 CS.player.gravity = function(){
   this.direction.y -= this.weight * CS.gravity;
-  if (this.direction.y < 0) this.falling = true;
+  if (this.direction.y < 0){
+    this.falling = true;
+    //this.mesh.rotation.x += 1;
+  }
 };
 
 CS.player.move = function(){
