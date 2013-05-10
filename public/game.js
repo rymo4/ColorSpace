@@ -41,7 +41,7 @@ CS.init = function(){
   // so pull it back
   CS.camera.position.x = 50;
   CS.camera.position.y = 10;
-  CS.camera.position.z = 350;
+  CS.camera.position.z = 320;
 
   // start the renderer
   CS.renderer.setSize(WIDTH, HEIGHT);
@@ -68,7 +68,7 @@ CS.init = function(){
 
   // create the sphere's material
   var mainMaterial = new THREE.MeshFaceMaterial({color: 0xCC0000});
-  CS.player.mesh = new THREE.Mesh(CS.player.geometry, shaderMaterial);
+  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), shaderMaterial);
   CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
   CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
   CS.player.mesh.position.z = CS.player.position.z * CS.UNIT;
