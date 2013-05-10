@@ -48,7 +48,7 @@ THREE.GeometryUtils.merge(geo, r_leg);
 geo.computeBoundingSphere();*/
 
 CS.player.geometry = THREE.CubeGeometry;
-CS.player.position = {x: 0, y: -6.5, z: 0.5};
+CS.player.position = {x: -40, y: -6.5, z: 0.5};
 CS.player.facing = 'right';
 CS.player.direction = {x: 0, y: 0, z: 0};
 CS.player.weight = 10;

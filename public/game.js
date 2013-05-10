@@ -54,6 +54,7 @@ CS.init = function(){
 
   CS.shaderMaterial = CS.Shaders.fader;
 
+  CS.level1.create();
   for (var i = 0; i < CS.level1.platforms.length; i++){
     var platform = CS.level1.platforms[i];
     var cube = new THREE.Mesh(new THREE.CubeGeometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), CS.Shaders.standard);
@@ -105,6 +106,8 @@ CS.animate = function() {
     // movement will go here
     CS.cumulatedFrameTime -= CS.gameStepTime;
     CS.player.move();
+    CS.camera.position.y = CS.player.mesh.position.y;
+    CS.camera.position.x = CS.player.mesh.position.x;
     CS.player.collision();
   }
   CS.stats.update();
