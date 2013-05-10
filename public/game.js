@@ -1,4 +1,5 @@
 window.CS = window.CS || { };
+CS.UNIT = 10;
 
 CS.init = function(){
   // set the scene size
@@ -120,6 +121,5 @@ CS._lastFrameTime = Date.now(); // timestamp
 
 CS.gameOver = false;
 
-CS.UNIT = 10;
 
 window.addEventListener("load", CS.init);

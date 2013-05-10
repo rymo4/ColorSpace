@@ -52,6 +52,8 @@ CS.player.position = {x: 0, y: -6.5, z: 0.5};
 CS.player.facing = 'right';
 CS.player.direction = {x: 0, y: 0, z: 0};
 CS.player.weight = 10;
+CS.player.inAir = false;
+CS.player.falling = false;
 CS.player.stop = function(){
   if (!CS.player.inAir){
     CS.player.direction.x = 0;
@@ -88,15 +90,16 @@ CS.player.handleKeys = function(){
   }
 };
 
-CS.player.fall = function(){
+CS.player.gravity = function(){
   this.direction.y -= this.weight * CS.gravity;
+  if (this.direction.y < 0) this.falling = true;
 };
 
 CS.player.move = function(){
   CS.player.handleKeys();
 
   if (CS.player.inAir){
-    CS.player.fall();
+    CS.player.gravity();
   }
 
   var x = CS.player.direction.x,
@@ -132,11 +135,18 @@ CS.player.collision = function () {
       any_collisions = true;
       CS.player.inAir = false;
       if (i == DOWN){
+        this.falling = false;
         this.direction.y = 0;
+        this.mesh.position.y += (distance - collisions[0].distance - 4);
       }
       else if (i == UP){
-        this.direction.y *= -1;
-        this.position.y -= 1;
+        if (!this.falling){
+          this.direction.y *= -1;
+        } else {
+          this.falling = false;
+          this.direction.y = 0;
+          this.mesh.position.y += 2*CS.UNIT + (collisions[0].distance - distance) + 1;
+        }
       }
       else { this.direction.x *= -1; }
      }
