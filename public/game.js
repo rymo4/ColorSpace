@@ -58,9 +58,10 @@ CS.init = function(){
   for (var i = 0; i < CS.level1.platforms.length; i++){
     var platform = CS.level1.platforms[i];
     var shader = platform.shader || CS.Shaders.standard;
-    var cube = new THREE.Mesh(new THREE.CubeGeometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), shader);
+    var cube = new THREE.Mesh(new THREE.CubeGeometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), shader);
     cube.position.x = platform.x*CS.UNIT;
     cube.position.y = platform.y*CS.UNIT;
+    cube.position.z = (platform.z || 0)*CS.UNIT;
     CS.level1.meshes.push(cube);
     CS.scene.add(cube);
   }
@@ -70,8 +71,20 @@ CS.init = function(){
   CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
   CS.player.mesh.position.z = CS.player.position.z * CS.UNIT;
   CS.scene.add(CS.player.mesh);
+
+
+  CS.setupLights();
+
+  // draw!
+  CS.renderer.render(CS.scene, CS.camera);
+  CS.start();
+};
+
+CS.setupLights = function(){
+  CS.sun = new THREE.AmbientLight(0xFFFFFF);
   // create a point light
   CS.pointLight = new THREE.PointLight(0xFFFFFF);
+  CS.pointLight.castShadow = true;
 
   // set its position
   CS.pointLight.position.x = 10;
@@ -80,9 +93,6 @@ CS.init = function(){
 
   // add to the scene
   CS.scene.add(CS.pointLight);
-  // draw!
-  CS.renderer.render(CS.scene, CS.camera);
-  CS.start();
 };
 
 CS.start = function(){

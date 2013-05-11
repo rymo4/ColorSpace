@@ -6,6 +6,7 @@ CS.level1.makeTree = function(base_x, base_y){
   var height = Math.floor((Math.random() * 2) + 2);
   var a = [
     {x: (base_x - 1), y: (base_y + height), shader: CS.Shaders.FOLIAGE},
+    {x: (base_x), y: (base_y + height), z: 1, shader: CS.Shaders.FOLIAGE},
     {x: (base_x + 1), y: (base_y + height), shader: CS.Shaders.FOLIAGE}
   ];
   for (var i = 0; i < height; i += 1){
@@ -13,6 +14,9 @@ CS.level1.makeTree = function(base_x, base_y){
   }
   if (Math.random() < 0.5){
     a.push({x: base_x + 1, y: base_y + height - 1, shader: CS.Shaders.FOLIAGE});
+  }
+  if (Math.random() < 0.5){
+    a.push({x: base_x + 1, y: base_y + height - 1, z: 1, shader: CS.Shaders.FOLIAGE});
   }
   if (Math.random() < 0.5){
     a.push({x: base_x - 1, y: base_y + height - 1, shader: CS.Shaders.FOLIAGE});
@@ -54,7 +58,7 @@ CS.level1.makeKeep = function(x, y){
   ].reverse();
   for (var i = 0; i < keep.length; i += 1){
     for (var j = 0; j < keep[0].length; j += 1){
-      if (keep[i][j] === ']') CS.level1.platforms.push({x: x + j, y: y + i});
+      if (keep[i][j] === ']') CS.level1.platforms.push({x: x + j, y: y + i, shader: CS.Shaders.STONE});
     }
   }
 };
@@ -65,15 +69,16 @@ CS.level1.create = function(){
   var mountain_start = Math.floor(Math.random() * max_mountain_dist);
   var last_tree = 0;
   for (var i = -100 ; i <= mountain_start; i += 1){
-    CS.level1.platforms.push({x: i, y: -15});
+    CS.level1.platforms.push({x: i, y: -15, shader: CS.Shaders.GRASS});
     var rand = Math.random();
-    if (i - last_tree + 100 > 3 && rand < 0.2){
-      last_tree = i;
+    if (last_tree > 3 && rand < 0.2){
+      last_tree = 0;
       var tree = CS.level1.makeTree(i, -14);
       for (var j = 0; j < tree.length; j += 1){
         CS.level1.platforms.push(tree[j]);
       }
     }
+    last_tree += 1;
   }
   // Mountain
   var max_mountain_height = 40;
@@ -84,7 +89,7 @@ CS.level1.create = function(){
       if (i !== mountain_start + 1 && j === i - mountain_start - 1 && Math.random() < 0.5){
         // Dont draw a block
       } else {
-        CS.level1.platforms.push({x: i, y: j  - 15});
+        CS.level1.platforms.push({x: i, y: j  - 15, shader: CS.Shaders.GRASS});
       }
     }
   }

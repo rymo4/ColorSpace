@@ -52,7 +52,13 @@ CS.Shaders.standard = new THREE.ShaderMaterial({
     ].join("\n")
 });
 CS.Shaders.textures = {
-  squares: THREE.ImageUtils.loadTexture( "textures/bright_squares256.png" )
+  squares: THREE.ImageUtils.loadTexture( "textures/bright_squares256.png" ),
+  tree: THREE.ImageUtils.loadTexture( "textures/blocks/leaves_opaque.png" ),
+  grass: THREE.ImageUtils.loadTexture( "textures/blocks/grass_top.png" ),
+  bark: THREE.ImageUtils.loadTexture( "textures/blocks/tree_jungle.png" ),
+  stone: THREE.ImageUtils.loadTexture( "textures/blocks/stonebrick.png" )
 };
-CS.Shaders.BARK = new THREE.MeshPhongMaterial( { shininess: 0, ambient: 0x444444, color: 0x964B00, specular: 0x333333, map: CS.Shaders.textures.squares });
-CS.Shaders.FOLIAGE = new THREE.MeshPhongMaterial( { shininess: 80, ambient: 0x444444, color: 0x11dd11, specular: 0x333333, map: CS.Shaders.textures.squares });
+CS.Shaders.BARK = new THREE.MeshPhongMaterial( { shininess: 0, ambient: 0x333333, color: 0x964B00, specular: 0x222222, map: CS.Shaders.textures.bark });
+CS.Shaders.FOLIAGE = new THREE.MeshPhongMaterial( { shininess: 80, ambient: 0x444444, color: 0x11dd11, specular: 0x222222, map: CS.Shaders.textures.tree });
+CS.Shaders.STONE = new THREE.MeshPhongMaterial( { shininess: 0, ambient: 0x333333, color: 0x964B00, specular: 0x222222, map: CS.Shaders.textures.stone });
+CS.Shaders.GRASS = new THREE.MeshPhongMaterial( { shininess: 80, ambient: 0x444444, color: 0x33dd33, specular: 0x222222, map: CS.Shaders.textures.grass });
