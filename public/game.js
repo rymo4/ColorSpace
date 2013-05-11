@@ -57,31 +57,29 @@ CS.init = function(){
   CS.level1.create();
   for (var i = 0; i < CS.level1.platforms.length; i++){
     var platform = CS.level1.platforms[i];
-    var cube = new THREE.Mesh(new THREE.CubeGeometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), CS.Shaders.standard);
+    var shader = platform.shader || CS.Shaders.standard;
+    var cube = new THREE.Mesh(new THREE.CubeGeometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), shader);
     cube.position.x = platform.x*CS.UNIT;
     cube.position.y = platform.y*CS.UNIT;
     CS.level1.meshes.push(cube);
     CS.scene.add(cube);
   }
 
-  // create the sphere's material
-  var mainMaterial = new THREE.MeshFaceMaterial({color: 0xCC0000});
-  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 5, 5, 5), CS.shaderMaterial);
+  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), CS.shaderMaterial);
   CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
   CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
   CS.player.mesh.position.z = CS.player.position.z * CS.UNIT;
   CS.scene.add(CS.player.mesh);
   // create a point light
-  var pointLight =
-    new THREE.PointLight(0xFFFFFF);
+  CS.pointLight = new THREE.PointLight(0xFFFFFF);
 
   // set its position
-  pointLight.position.x = 10;
-  pointLight.position.y = 50;
-  pointLight.position.z = 130;
+  CS.pointLight.position.x = 10;
+  CS.pointLight.position.y = 50;
+  CS.pointLight.position.z = 130;
 
   // add to the scene
-  CS.scene.add(pointLight);
+  CS.scene.add(CS.pointLight);
   // draw!
   CS.renderer.render(CS.scene, CS.camera);
   CS.start();

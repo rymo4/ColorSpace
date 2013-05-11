@@ -51,3 +51,8 @@ CS.Shaders.standard = new THREE.ShaderMaterial({
       "}"
     ].join("\n")
 });
+CS.Shaders.textures = {
+  squares: THREE.ImageUtils.loadTexture( "textures/bright_squares256.png" )
+};
+CS.Shaders.BARK = new THREE.MeshPhongMaterial( { shininess: 0, ambient: 0x444444, color: 0x964B00, specular: 0x333333, map: CS.Shaders.textures.squares });
+CS.Shaders.FOLIAGE = new THREE.MeshPhongMaterial( { shininess: 80, ambient: 0x444444, color: 0x11dd11, specular: 0x333333, map: CS.Shaders.textures.squares });
