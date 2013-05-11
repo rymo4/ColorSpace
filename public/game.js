@@ -81,17 +81,13 @@ CS.init = function(){
 };
 
 CS.setupLights = function(){
-  CS.sun = new THREE.AmbientLight(0xFFFFFF);
-  // create a point light
   CS.pointLight = new THREE.PointLight(0xFFFFFF);
   CS.pointLight.castShadow = true;
 
-  // set its position
   CS.pointLight.position.x = 10;
   CS.pointLight.position.y = 50;
   CS.pointLight.position.z = 130;
 
-  // add to the scene
   CS.scene.add(CS.pointLight);
 };
 
