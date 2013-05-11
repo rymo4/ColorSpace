@@ -2,6 +2,7 @@ window.CS = window.CS || {};
 CS.level1 = CS.level1 || {};
 
 CS.level1.platforms = [];
+CS.level1.nonCollidables = [];
 CS.level1.makeTree = function(base_x, base_y){
   var height = Math.floor((Math.random() * 2) + 2);
   var a = [
@@ -33,19 +34,19 @@ CS.level1.makeKeep = function(x, y){
     "                                           ]       ]             ",
     "                                          ]         ]            ",
     "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]         ]]]]]]]]]]]]]",
-    "]                                                               ]",
+    "]t                                                             T]",
     "]                                                               ]",
     "]                                                               ]",
     "]                                                               ]",
     "]  ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]                       ]",
     "]  ]     ]                         ]                            ]",
     "]  ]     ]                         ]       ]       ]            ]",
-    "]        ]                         ]                            ]",
+    "]        ]t                        ]                            ]",
     "]        ]                         ]                         ]]]]",
-    "]]]]]]]]]]                         ]                            ]",
+    "]]]]]]]]]]                         ]                           T]",
     "]                                  ]]                           ]",
     "]                                  ]             ]]             ]",
-    "]       ]]]]]]                                                  ]",
+    "]t      ]]]]]]                                                  ]",
     "]       ]                                                       ]",
     "]       ]       ]            ]]]           ]]]                  ]",
     "]       ]       ]                                               ]",
@@ -59,6 +60,10 @@ CS.level1.makeKeep = function(x, y){
   for (var i = 0; i < keep.length; i += 1){
     for (var j = 0; j < keep[0].length; j += 1){
       if (keep[i][j] === ']') CS.level1.platforms.push({x: x + j, y: y + i, shader: CS.Shaders.STONE});
+      if (keep[i][j] === 't') CS.level1.torches.push({x: x + j, y: y + i, wall: 'left'});
+      if (keep[i][j] === 'T') CS.level1.torches.push({x: x + j, y: y + i, wall: 'left'});
+      CS.level1.nonCollidables.push({x: x + j, y: y + i, z: -1, shader: CS.Shaders.STONE});
+
     }
   }
 };
@@ -70,6 +75,14 @@ CS.level1.create = function(){
   var last_tree = 0;
   for (var i = -100 ; i <= mountain_start; i += 1){
     CS.level1.platforms.push({x: i, y: -15, shader: CS.Shaders.GRASS});
+    if (i == -100){
+      for (var j = 0; j < 30; j += 1){
+        CS.level1.platforms.push({x: i, y: -15 + j, shader: CS.Shaders.STONE});
+      }
+      continue;
+    } else if (i == -99) {
+      CS.level1.torches.push({x: i, y: 0, wall: 'left'});
+    }
     var rand = Math.random();
     if (last_tree > 3 && rand < 0.2){
       last_tree = 0;
@@ -97,3 +110,5 @@ CS.level1.create = function(){
 };
 
 CS.level1.meshes = [];
+
+CS.level1.torches = [];

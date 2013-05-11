@@ -55,16 +55,8 @@ CS.init = function(){
   CS.shaderMaterial = CS.Shaders.fader;
 
   CS.level1.create();
-  for (var i = 0; i < CS.level1.platforms.length; i++){
-    var platform = CS.level1.platforms[i];
-    var shader = platform.shader || CS.Shaders.standard;
-    var cube = new THREE.Mesh(new THREE.CubeGeometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), shader);
-    cube.position.x = platform.x*CS.UNIT;
-    cube.position.y = platform.y*CS.UNIT;
-    cube.position.z = (platform.z || 0)*CS.UNIT;
-    CS.level1.meshes.push(cube);
-    CS.scene.add(cube);
-  }
+  CS.drawArray(CS.level1.platforms, true);
+  CS.drawArray(CS.level1.nonCollidables);
 
   CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), CS.shaderMaterial);
   CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
@@ -72,10 +64,8 @@ CS.init = function(){
   CS.player.mesh.position.z = CS.player.position.z * CS.UNIT;
   CS.scene.add(CS.player.mesh);
 
-
   CS.setupLights();
 
-  // draw!
   CS.renderer.render(CS.scene, CS.camera);
   CS.start();
 };
@@ -89,6 +79,20 @@ CS.setupLights = function(){
   CS.pointLight.position.z = 130;
 
   CS.scene.add(CS.pointLight);
+  for (var i = 0; i < CS.level1.torches.length; i += 1){
+    var l = new THREE.PointLight(0xFF9999);
+    var torch  = CS.level1.torches[i];
+    l.position.x = torch.x * CS.UNIT;
+    l.position.y = torch.y * CS.UNIT;
+    l.position.z = 1;
+    l.intensity = 2;
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(CS.UNIT, CS.UNIT), CS.Shaders.TORCH);
+    plane.position.x = torch.x * CS.UNIT;
+    plane.position.y = torch.y * CS.UNIT;
+    plane.rotation.z = torch.wall == 'left' ? 5 : -5;
+    CS.scene.add(l);
+    CS.scene.add(plane);
+  }
 };
 
 CS.start = function(){
@@ -118,6 +122,19 @@ CS.animate = function() {
   CS.renderer.render(CS.scene, CS.camera);
   if(!CS.gameOver) window.requestAnimationFrame(CS.animate);
 }
+
+CS.drawArray = function(ar){
+  for (var i = 0; i < ar.length; i++){
+    var platform = ar[i];
+    var shader = platform.shader || CS.Shaders.standard;
+    var cube = new THREE.Mesh(new THREE.CubeGeometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), shader);
+    cube.position.x = platform.x*CS.UNIT;
+    cube.position.y = platform.y*CS.UNIT;
+    cube.position.z = (platform.z || 0)*CS.UNIT;
+    CS.level1.meshes.push(cube);
+    CS.scene.add(cube);
+  }
+};
 CS.gameStepTime = 50;
 
 CS.frameTime = 0; // ms
@@ -125,6 +142,5 @@ CS.cumulatedFrameTime = 0; // ms
 CS._lastFrameTime = Date.now(); // timestamp
 
 CS.gameOver = false;
-
 
 window.addEventListener("load", CS.init);

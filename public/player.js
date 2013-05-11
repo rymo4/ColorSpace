@@ -3,52 +3,8 @@ CS.player = CS.player || {};
 
 CS.player.material = THREE.MeshFaceMaterial;//({color: 0xCC0000});
 
-
-//Character model
-/*vaar torso = new THREE.Mesh(new THREE.CubeGeometry(8, 10, 8));
-
-var neck = new THREE.Mesh(new THREE.CubeGeometry(3, 4, 3));
-neck.position.y = torso.position.y + 6;
-
-var head = new THREE.Mesh(new THREE.SphereGeometry(5, 5, 5));
-head.position.y = neck.position.y + 5;
-
-var r_arm = new THREE.Mesh(new THREE.CubeGeometry(3, 7, 2));
-r_arm.position.z = torso.position.z + 10;
-r_arm.position.y = torso.position.y + 1;
-r_arm.position.x = torso.position.x - 2;
-r_arm.rotation.z = -Math.PI/3;
-
-var l_arm = new THREE.Mesh(new THREE.CubeGeometry(3, 7, 2));
-l_arm.position.z = torso.position.z - 10;
-l_arm.position.y = torso.position.y + 1;
-l_arm.position.x = torso.position.x + 2;
-l_arm.rotation.z = Math.PI/3;
-
-var l_leg = new THREE.Mesh(new THREE.CubeGeometry(3, 8, 3));
-l_leg.position.z = torso.position.z - 3;
-l_leg.position.y = torso.position.y - 6;
-l_leg.position.x = torso.position.x - 3;
-l_leg.rotation.z = -Math.PI/3;
-
-var r_leg = new THREE.Mesh(new THREE.CubeGeometry(3, 8, 3));
-r_leg.position.z = torso.position.z + 3;
-r_leg.position.y = torso.position.y - 6;
-r_leg.position.x = torso.position.x + 3;
-r_leg.rotation.z = Math.PI/3;
-
-var geo = new THREE.Geometry();
-THREE.GeometryUtils.merge(geo, torso);
-THREE.GeometryUtils.merge(geo, neck);
-THREE.GeometryUtils.merge(geo, head);
-THREE.GeometryUtils.merge(geo, r_arm);
-THREE.GeometryUtils.merge(geo, l_arm);
-THREE.GeometryUtils.merge(geo, l_leg);
-THREE.GeometryUtils.merge(geo, r_leg);
-geo.computeBoundingSphere();*/
-
 CS.player.geometry = THREE.CubeGeometry;
-CS.player.position = {x: -40, y: -6.5, z: 0.5};
+CS.player.position = {x: 0, y: 0, z: 0.5};
 CS.player.facing = 'right';
 CS.player.direction = {x: 0, y: 0, z: 0};
 CS.player.weight = 10;
