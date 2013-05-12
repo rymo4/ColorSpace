@@ -1,8 +1,6 @@
 window.CS = window.CS || {};
 CS.player = CS.player || {};
 
-CS.player.material = THREE.MeshFaceMaterial;//({color: 0xCC0000});
-
 CS.player.geometry = THREE.CubeGeometry;
 CS.player.position = {x: 0, y: 0, z: 0.5};
 CS.player.facing = 'right';
@@ -18,7 +16,7 @@ var current_tail = 0,
     trail_length = 60;
 
 
-CS.player.add_to_trail = function(){
+CS.player.addParticlesToTrail = function(){
   var particleCount = 10,
       particles = new THREE.Geometry(),
       pMaterial = CS.Shaders.TRAIL;
@@ -39,18 +37,18 @@ CS.player.add_to_trail = function(){
 };
 
 
-CS.player.init_trail = function(){
-  for (var i=0;i<trail_length;i++) {
-    CS.player.add_to_trail();
+CS.player.initTrail = function(){
+  for (var i = 0; i < trail_length; i++) {
+    CS.player.addParticlesToTrail();
   }
 }
 
-CS.player.update_trail = function(){
-  for (var i=0;i<trail_length;i++) {
+CS.player.updateTrail = function(){
+  for (var i = 0; i < trail_length; i++) {
     var tail_frame = CS.player.trail[i];
-    for (var j=0;j<10;j++) {
+    for (var j = 0; j < 10; j++) {
       var particle = tail_frame.vertices[j];
-      if (i==current_tail){
+      if (i === current_tail){
         particle.x = CS.player.mesh.position.x + Math.random() * 10 - 5,
         particle.y = CS.player.mesh.position.y + Math.random() * 10 - 5,
         particle.z = CS.player.mesh.position.z + Math.random() * 8 - 4;
@@ -64,7 +62,7 @@ CS.player.update_trail = function(){
     CS.player.trailS[i].geometry.__dirtyVertices = true;
   }
   current_tail += 1;
-  if (current_tail==trail_length) {
+  if (current_tail === trail_length) {
     current_tail = 0;
   }
 };
@@ -143,7 +141,9 @@ CS.player.rays = [
   new THREE.Vector3(w, 0, 0), // R
   new THREE.Vector3(0, w, 0), // U
   new THREE.Vector3(-w, 0, 0), // L
-  new THREE.Vector3(0, -w, 0), // D
+  new THREE.Vector3(0, -w, 0)//, // D
+  //new THREE.Vector3(0, 0, w), // Out
+  //new THREE.Vector3(0, 0, -w) // In
 ];
 
 CS.player.caster = new THREE.Raycaster();
@@ -152,12 +152,14 @@ CS.player.collision = function () {
   var RIGHT = 0,
       UP    = 1,
       LEFT  = 2,
-      DOWN  = 3;
-  var collisions, i,
-      distance = CS.UNIT;
-      obstacles = CS.level1.meshes;
+      DOWN  = 3,
+      IN    = 5,
+      OUT   = 4;
+  var collisions,
+      distance = CS.UNIT,
+      obstacles = CS.level.meshes;
   var any_collisions = false;
-  for (i = 0; i < this.rays.length; i += 1) {
+  for (var i = 0; i < this.rays.length; i += 1) {
     this.caster.set(this.mesh.position, this.rays[i]);
     collisions = this.caster.intersectObjects(obstacles);
     if (collisions.length > 0){
@@ -179,11 +181,17 @@ CS.player.collision = function () {
             this.mesh.position.y += 2*CS.UNIT + (collisions[0].distance - distance) + 1;
           }
         }
-        else { this.direction.x *= -1; }
+        else if (i == LEFT || i == RIGHT){
+          this.direction.x *= -1;
+        }
+        //for (var j = 0; j < collisions.length; j+= 1){
+        //  collision[j].p
+        ///}
       }
-     }
+    }
   }
   if (!any_collisions){
     CS.player.inAir = true;
   }
-}
+};
+

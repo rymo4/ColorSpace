@@ -10,6 +10,7 @@ Can you escape your master's TV screen?
 * Merge blocks for performance (http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/)
 * Make a sky (http://learningthreejs.com/blog/2011/08/15/lets-do-a-sky/)
 * Fix torches on right walls
+* Make shrroms grow, faster and faster as you jump on more and more shrooms. Makes cool shader effects.
 
 ## Credits
 
@@ -38,3 +39,5 @@ Can you escape your master's TV screen?
 * Textures for all types of blocks
 * Text based special feature creation (eg. the keep)
 * Indoor and outdoor areas
+
+

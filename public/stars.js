@@ -32,7 +32,7 @@ CS.stars.drawParticles = function(){
 
 CS.stars.animation = function (){
   var pCount = CS.stars.particleCount;
-  while(pCount--) {
+  while (pCount--) {
     var particle = CS.stars.particles.vertices[pCount];
 
     if(particle.x < -x_spread/2) {
@@ -40,7 +40,7 @@ CS.stars.animation = function (){
       particle.velocity.x = 0;
     }
 
-    particle.velocity.x -= Math.random() * .05;
+    particle.velocity.x -= Math.random() * 0.05;
     particle.x += particle.velocity.x;
   }
 

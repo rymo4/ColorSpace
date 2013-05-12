@@ -1,16 +1,19 @@
 window.CS = window.CS || { };
 CS.UNIT = 10;
+CS.gameStepTime = 50;
+CS.frameTime = 0;
+CS.cumulatedFrameTime = 0;
+CS._lastFrameTime = Date.now();
+CS.gameOver = false;
 
 CS.init = function(){
-  // set the scene size
   var WIDTH = window.innerWidth,
-    HEIGHT = window.innerHeight;
+      HEIGHT = window.innerHeight;
 
-  // set some camera attributes
   var VIEW_ANGLE = 45,
-    ASPECT = WIDTH / HEIGHT,
-    NEAR = 0.1,
-    FAR = 10000;
+      ASPECT = WIDTH / HEIGHT,
+      NEAR = 0.1,
+      FAR = 10000;
 
   CS.stats = new Stats();
   CS.stats.setMode(0);
@@ -19,54 +22,39 @@ CS.init = function(){
   CS.stats.domElement.style.top = '0px';
   document.body.appendChild(CS.stats.domElement);
 
-  // get the DOM element to attach to
-  // - assume we've got jQuery to hand
   var $container = $('#container');
 
-  // create a WebGL renderer, camera
-  // and a scene
   CS.renderer = new THREE.WebGLRenderer();
-  CS.camera =
-    new THREE.PerspectiveCamera(
-      VIEW_ANGLE,
-      ASPECT,
-      NEAR,
-      FAR);
+  CS.camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 
   CS.scene = new THREE.Scene();
-
-  // add the camera to the scene
   CS.scene.add(CS.camera);
 
-  // the camera starts at 0,0,0
-  // so pull it back
   CS.camera.position.x = 50;
   CS.camera.position.y = 10;
   CS.camera.position.z = 320;
 
-  // start the renderer
   CS.renderer.setSize(WIDTH, HEIGHT);
 
-  // attach the render-supplied DOM element
   $container.append(CS.renderer.domElement);
-  var vShader = $('#vertexshader');
-  var fShader = $('#fragmentshader');
-
-  CS.shaderMaterial = CS.Shaders.fader;
 
   CS.level1.create();
   CS.drawArray(CS.level1.platforms, false);
   CS.drawArray(CS.level1.nonCollidables, true);
+  CS.drawPlaneArray(CS.level.torches);
+  CS.plants.render();
 
-  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), CS.shaderMaterial);
+  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), CS.Shaders.fader);
   CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
-  CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
+  if (!CS.player.inAir){
+    CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
+  }
   CS.player.mesh.position.z = CS.player.position.z * CS.UNIT;
   CS.scene.add(CS.player.mesh);
 
   CS.setupLights();
   CS.stars.drawParticles();
-  CS.player.init_trail();
+  CS.player.initTrail();
 
   CS.renderer.render(CS.scene, CS.camera);
   CS.start();
@@ -81,13 +69,16 @@ CS.setupLights = function(){
   CS.pointLight.position.z = 130;
 
   CS.scene.add(CS.pointLight);
-  for (var i = 0; i < CS.level1.torches.length; i += 1){
-    var l = new THREE.PointLight(0xFF9999);
-    var torch  = CS.level1.torches[i];
+};
+
+CS.drawPlaneArray = function(ar){
+  for (var i = 0; i < ar.length; i += 1){
+    var l = new THREE.PointLight(0xFF7F00);
+    var torch  = ar[i];
     l.position.x = torch.x * CS.UNIT;
     l.position.y = torch.y * CS.UNIT;
-    l.position.z = 1;
-    l.intensity = 2;
+    l.position.z = 11;
+    l.intensity = 1;
     var plane = new THREE.Mesh(new THREE.PlaneGeometry(CS.UNIT, CS.UNIT), CS.Shaders.TORCH);
     plane.position.x = torch.x * CS.UNIT;
     plane.position.y = torch.y * CS.UNIT;
@@ -110,7 +101,7 @@ CS.animate = function() {
   CS.frameTime = time - CS._lastFrameTime;
   CS._lastFrameTime = time;
   CS.cumulatedFrameTime += CS.frameTime;
-  CS.shaderMaterial.uniforms['time'].value = .0025 * ( Date.now() - start )
+  CS.Shaders.fader.uniforms['time'].value = .0025 * ( Date.now() - start )
 
   while (CS.cumulatedFrameTime > CS.gameStepTime) {
     // movement will go here
@@ -119,7 +110,7 @@ CS.animate = function() {
     CS.camera.position.y = CS.player.mesh.position.y;
     CS.camera.position.x = CS.player.mesh.position.x;
     CS.player.collision();
-    CS.player.update_trail();
+    CS.player.updateTrail();
     CS.stars.animation();
   }
   CS.stats.update();
@@ -127,9 +118,13 @@ CS.animate = function() {
   if(!CS.gameOver) window.requestAnimationFrame(CS.animate);
 }
 
+<<<<<<< HEAD
 CS.drawArray = function(ar, merge){
   var geo = new THREE.Geometry();
   var prev_shader = 0;
+=======
+CS.drawArray = function(ar, has_collision){
+>>>>>>> b8e96f805fdd3a875636d8088e6e2dd2c5ea86c0
   for (var i = 0; i < ar.length; i++){
     var platform = ar[i];
     var shader = platform.shader || CS.Shaders.standard;
@@ -137,6 +132,7 @@ CS.drawArray = function(ar, merge){
     cube.position.x = platform.x*CS.UNIT;
     cube.position.y = platform.y*CS.UNIT;
     cube.position.z = (platform.z || 0)*CS.UNIT;
+<<<<<<< HEAD
     if (merge == true) {
       if ( (shader == prev_shader || prev_shader == 0) && i != ar.length -1) {
         THREE.GeometryUtils.merge(geo, cube);
@@ -154,15 +150,11 @@ CS.drawArray = function(ar, merge){
     }
     prev_shader = shader;
     CS.level1.meshes.push(cube);
+=======
+    if (has_collision) CS.level.meshes.push(cube);
+    CS.scene.add(cube);
+>>>>>>> b8e96f805fdd3a875636d8088e6e2dd2c5ea86c0
   }
 };
-
-CS.gameStepTime = 50;
-
-CS.frameTime = 0; // ms
-CS.cumulatedFrameTime = 0; // ms
-CS._lastFrameTime = Date.now(); // timestamp
-
-CS.gameOver = false;
 
 window.addEventListener("load", CS.init);
