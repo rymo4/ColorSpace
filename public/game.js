@@ -46,7 +46,7 @@ CS.init = function(){
 
   CS.setupLights();
   CS.stars.drawParticles();
-  CS.player.init_trail();
+  CS.player.initTrail();
 
   CS.renderer.render(CS.scene, CS.camera);
   CS.start();
@@ -102,7 +102,7 @@ CS.animate = function() {
     CS.camera.position.y = CS.player.mesh.position.y;
     CS.camera.position.x = CS.player.mesh.position.x;
     CS.player.collision();
-    CS.player.update_trail();
+    CS.player.updateTrail();
     CS.stars.animation();
   }
   CS.stats.update();

@@ -16,7 +16,7 @@ var current_tail = 0,
     trail_length = 60;
 
 
-CS.player.add_to_trail = function(){
+CS.player.addParticlesToTrail = function(){
   var particleCount = 10,
       particles = new THREE.Geometry(),
       pMaterial = CS.Shaders.TRAIL;
@@ -37,18 +37,18 @@ CS.player.add_to_trail = function(){
 };
 
 
-CS.player.init_trail = function(){
-  for (var i=0;i<trail_length;i++) {
-    CS.player.add_to_trail();
+CS.player.initTrail = function(){
+  for (var i = 0; i < trail_length; i++) {
+    CS.player.addParticlesToTrail();
   }
 }
 
-CS.player.update_trail = function(){
-  for (var i=0;i<trail_length;i++) {
+CS.player.updateTrail = function(){
+  for (var i = 0; i < trail_length; i++) {
     var tail_frame = CS.player.trail[i];
-    for (var j=0;j<10;j++) {
+    for (var j = 0; j < 10; j++) {
       var particle = tail_frame.vertices[j];
-      if (i==current_tail){
+      if (i === current_tail){
         particle.x = CS.player.mesh.position.x + Math.random() * 10 - 5,
         particle.y = CS.player.mesh.position.y + Math.random() * 10 - 5,
         particle.z = CS.player.mesh.position.z + Math.random() * 8 - 4;
@@ -62,7 +62,7 @@ CS.player.update_trail = function(){
     CS.player.trailS[i].geometry.__dirtyVertices = true;
   }
   current_tail += 1;
-  if (current_tail==trail_length) {
+  if (current_tail === trail_length) {
     current_tail = 0;
   }
 };
