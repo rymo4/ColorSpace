@@ -52,13 +52,12 @@ CS.init = function(){
   var vShader = $('#vertexshader');
   var fShader = $('#fragmentshader');
 
-  CS.shaderMaterial = CS.Shaders.fader;
-
   CS.level1.create();
   CS.drawArray(CS.level1.platforms, true);
   CS.drawArray(CS.level1.nonCollidables);
+  CS.drawShrooms(CS.level1.shrooms);
 
-  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), CS.shaderMaterial);
+  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), CS.Shaders.fader);
   CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
   CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
   CS.player.mesh.position.z = CS.player.position.z * CS.UNIT;
@@ -79,13 +78,16 @@ CS.setupLights = function(){
   CS.pointLight.position.z = 130;
 
   CS.scene.add(CS.pointLight);
-  for (var i = 0; i < CS.level1.torches.length; i += 1){
-    var l = new THREE.PointLight(0xFF9999);
-    var torch  = CS.level1.torches[i];
+};
+
+CS.drawPlaneArray = function(ar){
+  for (var i = 0; i < ar.length; i += 1){
+    var l = new THREE.PointLight(0xFF7F00);
+    var torch  = ar[i];
     l.position.x = torch.x * CS.UNIT;
     l.position.y = torch.y * CS.UNIT;
     l.position.z = 1;
-    l.intensity = 2;
+    l.intensity = 1;
     var plane = new THREE.Mesh(new THREE.PlaneGeometry(CS.UNIT, CS.UNIT), CS.Shaders.TORCH);
     plane.position.x = torch.x * CS.UNIT;
     plane.position.y = torch.y * CS.UNIT;
@@ -108,7 +110,7 @@ CS.animate = function() {
   CS.frameTime = time - CS._lastFrameTime;
   CS._lastFrameTime = time;
   CS.cumulatedFrameTime += CS.frameTime;
-  CS.shaderMaterial.uniforms['time'].value = .0025 * ( Date.now() - start )
+  CS.Shaders.fader.uniforms['time'].value = .0025 * ( Date.now() - start )
 
   while (CS.cumulatedFrameTime > CS.gameStepTime) {
     // movement will go here
@@ -133,6 +135,20 @@ CS.drawArray = function(ar){
     cube.position.z = (platform.z || 0)*CS.UNIT;
     CS.level1.meshes.push(cube);
     CS.scene.add(cube);
+  }
+};
+
+CS.drawShrooms = function(shrooms){
+  for (var i = 0; i < shrooms.length ; i += 1){
+    var shroom = shrooms[i];
+    var mesh = new THREE.Mesh(new THREE.PlaneGeometry(CS.UNIT, CS.UNIT), CS.Shaders.SHROOM);
+    mesh.position.x = shroom.x*CS.UNIT;
+    mesh.position.y = shroom.y*CS.UNIT;
+    var shroom_width = 4;
+    var rand_side = Math.floor(Math.random() * (shroom_width + 1)) + 5;///2 // for floating pt accuracy
+    mesh.position.z = rand_side;
+    CS.level1.meshes.push(mesh);
+    CS.scene.add(mesh);
   }
 };
 CS.gameStepTime = 50;

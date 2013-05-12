@@ -75,6 +75,10 @@ CS.level1.create = function(){
   var last_tree = 0;
   for (var i = -100 ; i <= mountain_start; i += 1){
     CS.level1.platforms.push({x: i, y: -15, shader: CS.Shaders.GRASS});
+    if (Math.random() < 0.2){
+      CS.level1.shrooms.push({x: i, y: -14, shader: CS.Shaders.SHROOM });
+
+    }
     if (i == -100){
       for (var j = 0; j < 30; j += 1){
         CS.level1.platforms.push({x: i, y: -15 + j, shader: CS.Shaders.STONE});
@@ -112,3 +116,5 @@ CS.level1.create = function(){
 CS.level1.meshes = [];
 
 CS.level1.torches = [];
+
+CS.level1.shrooms = [];

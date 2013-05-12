@@ -86,6 +86,8 @@ CS.player.rays = [
   new THREE.Vector3(0, w, 0), // U
   new THREE.Vector3(-w, 0, 0), // L
   new THREE.Vector3(0, -w, 0), // D
+  new THREE.Vector3(0, 0, w), // Out
+  new THREE.Vector3(0, 0, -w) // In
 ];
 
 CS.player.caster = new THREE.Raycaster();
@@ -94,12 +96,14 @@ CS.player.collision = function () {
   var RIGHT = 0,
       UP    = 1,
       LEFT  = 2,
-      DOWN  = 3;
-  var collisions, i,
-      distance = CS.UNIT;
+      DOWN  = 3,
+      IN    = 5,
+      OUT   = 4;
+  var collisions,
+      distance = CS.UNIT,
       obstacles = CS.level1.meshes;
   var any_collisions = false;
-  for (i = 0; i < this.rays.length; i += 1) {
+  for (var i = 0; i < this.rays.length; i += 1) {
     this.caster.set(this.mesh.position, this.rays[i]);
     collisions = this.caster.intersectObjects(obstacles);
     if (collisions.length > 0){
@@ -122,10 +126,14 @@ CS.player.collision = function () {
           }
         }
         else { this.direction.x *= -1; }
+        //for (var j = 0; j < collisions.length; j+= 1){
+        //  collision[j].p
+        ///}
       }
-     }
+    }
   }
   if (!any_collisions){
     CS.player.inAir = true;
   }
-}
+};
+
