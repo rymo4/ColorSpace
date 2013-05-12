@@ -55,8 +55,8 @@ CS.init = function(){
   CS.shaderMaterial = CS.Shaders.fader;
 
   CS.level1.create();
-  CS.drawArray(CS.level1.platforms, true);
-  CS.drawArray(CS.level1.nonCollidables);
+  CS.drawArray(CS.level1.platforms, false);
+  CS.drawArray(CS.level1.nonCollidables, true);
 
   CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), CS.shaderMaterial);
   CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
@@ -127,7 +127,9 @@ CS.animate = function() {
   if(!CS.gameOver) window.requestAnimationFrame(CS.animate);
 }
 
-CS.drawArray = function(ar){
+CS.drawArray = function(ar, merge){
+  var geo = new THREE.Geometry();
+  var prev_shader = 0;
   for (var i = 0; i < ar.length; i++){
     var platform = ar[i];
     var shader = platform.shader || CS.Shaders.standard;
@@ -135,8 +137,23 @@ CS.drawArray = function(ar){
     cube.position.x = platform.x*CS.UNIT;
     cube.position.y = platform.y*CS.UNIT;
     cube.position.z = (platform.z || 0)*CS.UNIT;
+    if (merge == true) {
+      if ( (shader == prev_shader || prev_shader == 0) && i != ar.length -1) {
+        THREE.GeometryUtils.merge(geo, cube);
+      }
+      else {
+        var mergedMesh = new THREE.Mesh(geo, prev_shader);
+        CS.scene.add(mergedMesh);
+        geo = new THREE.Geometry();
+        THREE.GeometryUtils.merge(geo, cube);
+        console.log('added merge');
+      }
+    }
+    else {
+      CS.scene.add(cube);
+    }
+    prev_shader = shader;
     CS.level1.meshes.push(cube);
-    CS.scene.add(cube);
   }
 };
 
