@@ -11,6 +11,73 @@ CS.player.weight = 10;
 CS.player.inAir = false;
 CS.player.falling = false;
 CS.player.heightInAir = 0;
+
+CS.player.trail = [];
+CS.player.trailS = [];
+var current_tail = 0,
+    trail_length = 60;
+
+
+CS.player.add_to_trail = function(){
+  var particleCount = 10,
+      particles = new THREE.Geometry(),
+      pMaterial =
+        new THREE.ParticleBasicMaterial({
+          color: 0xFFFFFF,
+          size: 2,
+          map: THREE.ImageUtils.loadTexture(
+            "textures/particle.png"
+          ),
+          blending: THREE.AdditiveBlending,
+          transparent: true
+        });
+
+  for(var p = 0; p < particleCount; p++) {
+    var pX = CS.player.mesh.position.x + Math.random() * 10 - 5,
+        pY = CS.player.mesh.position.y + Math.random() * 5,
+        pZ = CS.player.mesh.position.z + Math.random() * 12 - 15,
+        particle = new THREE.Vertex(new THREE.Vector3(pX, pY, pZ));
+    particles.vertices.push(particle);
+  }
+  CS.player.trail.push(particles);
+
+  var particleSystem = new THREE.ParticleSystem(particles, pMaterial);
+  particleSystem.sortParticles = true;
+  CS.player.trailS.push(particleSystem);
+  CS.scene.add(particleSystem);
+};
+
+
+CS.player.init_trail = function(){
+  for (var i=0;i<trail_length;i++) {
+    CS.player.add_to_trail();
+  }
+}
+
+CS.player.update_trail = function(){
+  for (var i=0;i<trail_length;i++) {
+    var tail_frame = CS.player.trail[i];
+    for (var j=0;j<10;j++) {
+      var particle = tail_frame.vertices[j];
+      if (i==current_tail){
+        particle.x = CS.player.mesh.position.x + Math.random() * 10 - 5,
+        particle.y = CS.player.mesh.position.y + Math.random() * 10 - 5,
+        particle.z = CS.player.mesh.position.z + Math.random() * 8 - 4;
+      }
+      else {
+        cons = (Math.abs(CS.player.mesh.position.x - particle.x) + Math.abs(CS.player.mesh.position.y - particle.y))/12;
+        particle.x += cons*(Math.random()/2 - Math.random()/2),
+        particle.y += cons*(Math.random()/2 - Math.random()/2);
+      }
+    }
+    CS.player.trailS[i].geometry.__dirtyVertices = true;
+  }
+  current_tail += 1;
+  if (current_tail==trail_length) {
+    current_tail = 0;
+  }
+};
+
 CS.player.stop = function(){
   if (!CS.player.inAir){
     CS.player.direction.x = 0;

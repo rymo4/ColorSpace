@@ -65,6 +65,8 @@ CS.init = function(){
   CS.scene.add(CS.player.mesh);
 
   CS.setupLights();
+  CS.stars.drawParticles();
+  CS.player.init_trail();
 
   CS.renderer.render(CS.scene, CS.camera);
   CS.start();
@@ -117,6 +119,8 @@ CS.animate = function() {
     CS.camera.position.y = CS.player.mesh.position.y;
     CS.camera.position.x = CS.player.mesh.position.x;
     CS.player.collision();
+    CS.player.update_trail();
+    CS.stars.animation();
   }
   CS.stats.update();
   CS.renderer.render(CS.scene, CS.camera);
@@ -135,6 +139,7 @@ CS.drawArray = function(ar){
     CS.scene.add(cube);
   }
 };
+
 CS.gameStepTime = 50;
 
 CS.frameTime = 0; // ms
