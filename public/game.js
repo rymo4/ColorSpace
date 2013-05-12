@@ -118,13 +118,9 @@ CS.animate = function() {
   if(!CS.gameOver) window.requestAnimationFrame(CS.animate);
 }
 
-<<<<<<< HEAD
-CS.drawArray = function(ar, merge){
+CS.drawArray = function(ar, has_collision){
   var geo = new THREE.Geometry();
   var prev_shader = 0;
-=======
-CS.drawArray = function(ar, has_collision){
->>>>>>> b8e96f805fdd3a875636d8088e6e2dd2c5ea86c0
   for (var i = 0; i < ar.length; i++){
     var platform = ar[i];
     var shader = platform.shader || CS.Shaders.standard;
@@ -132,8 +128,7 @@ CS.drawArray = function(ar, has_collision){
     cube.position.x = platform.x*CS.UNIT;
     cube.position.y = platform.y*CS.UNIT;
     cube.position.z = (platform.z || 0)*CS.UNIT;
-<<<<<<< HEAD
-    if (merge == true) {
+    if (has_collision != true) {
       if ( (shader == prev_shader || prev_shader == 0) && i != ar.length -1) {
         THREE.GeometryUtils.merge(geo, cube);
       }
@@ -147,13 +142,9 @@ CS.drawArray = function(ar, has_collision){
     }
     else {
       CS.scene.add(cube);
+      CS.level1.meshes.push(cube);
     }
     prev_shader = shader;
-    CS.level1.meshes.push(cube);
-=======
-    if (has_collision) CS.level.meshes.push(cube);
-    CS.scene.add(cube);
->>>>>>> b8e96f805fdd3a875636d8088e6e2dd2c5ea86c0
   }
 };
 
