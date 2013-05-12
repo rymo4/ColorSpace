@@ -38,9 +38,9 @@ CS.init = function(){
 
   $container.append(CS.renderer.domElement);
 
-  CS.level1.create();
-  CS.drawArray(CS.level1.platforms, false);
-  CS.drawArray(CS.level1.nonCollidables, true);
+  CS.level.create();
+  CS.drawArray(CS.level.platforms, true);
+  CS.drawArray(CS.level.nonCollidables, false);
   CS.drawPlaneArray(CS.level.torches);
   CS.plants.render();
 
@@ -142,7 +142,7 @@ CS.drawArray = function(ar, has_collision){
     }
     else {
       CS.scene.add(cube);
-      CS.level1.meshes.push(cube);
+      CS.level.meshes.push(cube);
     }
     prev_shader = shader;
   }
