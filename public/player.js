@@ -141,9 +141,9 @@ CS.player.rays = [
   new THREE.Vector3(w, 0, 0), // R
   new THREE.Vector3(0, w, 0), // U
   new THREE.Vector3(-w, 0, 0), // L
-  new THREE.Vector3(0, -w, 0), // D
-  new THREE.Vector3(0, 0, w), // Out
-  new THREE.Vector3(0, 0, -w) // In
+  new THREE.Vector3(0, -w, 0)//, // D
+  //new THREE.Vector3(0, 0, w), // Out
+  //new THREE.Vector3(0, 0, -w) // In
 ];
 
 CS.player.caster = new THREE.Raycaster();
@@ -157,7 +157,7 @@ CS.player.collision = function () {
       OUT   = 4;
   var collisions,
       distance = CS.UNIT,
-      obstacles = CS.level1.meshes;
+      obstacles = CS.level.meshes;
   var any_collisions = false;
   for (var i = 0; i < this.rays.length; i += 1) {
     this.caster.set(this.mesh.position, this.rays[i]);
@@ -181,7 +181,9 @@ CS.player.collision = function () {
             this.mesh.position.y += 2*CS.UNIT + (collisions[0].distance - distance) + 1;
           }
         }
-        else { this.direction.x *= -1; }
+        else if (i == LEFT || i == RIGHT){
+          this.direction.x *= -1;
+        }
         //for (var j = 0; j < collisions.length; j+= 1){
         //  collision[j].p
         ///}

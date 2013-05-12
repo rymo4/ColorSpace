@@ -1,5 +1,10 @@
 window.CS = window.CS || { };
 CS.UNIT = 10;
+CS.gameStepTime = 50;
+CS.frameTime = 0;
+CS.cumulatedFrameTime = 0;
+CS._lastFrameTime = Date.now();
+CS.gameOver = false;
 
 CS.init = function(){
   var WIDTH = window.innerWidth,
@@ -33,14 +38,17 @@ CS.init = function(){
 
   $container.append(CS.renderer.domElement);
 
-  CS.level1.create();
-  CS.drawArray(CS.level1.platforms, true);
-  CS.drawArray(CS.level1.nonCollidables);
-  CS.plants.draw(CS.level1.shrooms);
+  CS.level.create();
+  CS.drawArray(CS.level.platforms, true);
+  CS.drawArray(CS.level.nonCollidables);
+  CS.drawPlaneArray(CS.level.torches);
+  CS.plants.render();
 
   CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), CS.Shaders.fader);
   CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
-  CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
+  if (!CS.player.inAir){
+    CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
+  }
   CS.player.mesh.position.z = CS.player.position.z * CS.UNIT;
   CS.scene.add(CS.player.mesh);
 
@@ -69,7 +77,7 @@ CS.drawPlaneArray = function(ar){
     var torch  = ar[i];
     l.position.x = torch.x * CS.UNIT;
     l.position.y = torch.y * CS.UNIT;
-    l.position.z = 1;
+    l.position.z = 11;
     l.intensity = 1;
     var plane = new THREE.Mesh(new THREE.PlaneGeometry(CS.UNIT, CS.UNIT), CS.Shaders.TORCH);
     plane.position.x = torch.x * CS.UNIT;
@@ -110,7 +118,7 @@ CS.animate = function() {
   if(!CS.gameOver) window.requestAnimationFrame(CS.animate);
 }
 
-CS.drawArray = function(ar){
+CS.drawArray = function(ar, has_collision){
   for (var i = 0; i < ar.length; i++){
     var platform = ar[i];
     var shader = platform.shader || CS.Shaders.standard;
@@ -118,16 +126,9 @@ CS.drawArray = function(ar){
     cube.position.x = platform.x*CS.UNIT;
     cube.position.y = platform.y*CS.UNIT;
     cube.position.z = (platform.z || 0)*CS.UNIT;
-    CS.level1.meshes.push(cube);
+    if (has_collision) CS.level.meshes.push(cube);
     CS.scene.add(cube);
   }
 };
-
-CS.gameStepTime = 50;
-CS.frameTime = 0; // ms
-CS.cumulatedFrameTime = 0; // ms
-CS._lastFrameTime = Date.now(); // timestamp
-
-CS.gameOver = false;
 
 window.addEventListener("load", CS.init);

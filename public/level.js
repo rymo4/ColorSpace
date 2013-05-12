@@ -1,9 +1,12 @@
 window.CS = window.CS || {};
-CS.level1 = CS.level1 || {};
+CS.level = CS.level || {};
+CS.level.plants = CS.level.plants || {};
+CS.level.meshes = [];
+CS.level.torches = [];
 
-CS.level1.platforms = [];
-CS.level1.nonCollidables = [];
-CS.level1.makeTree = function(base_x, base_y){
+CS.level.platforms = [];
+CS.level.nonCollidables = [];
+CS.level.makeTree = function(base_x, base_y){
   var height = Math.floor((Math.random() * 2) + 2);
   var a = [
     {x: (base_x - 1), y: (base_y + height), shader: CS.Shaders.FOLIAGE},
@@ -28,7 +31,7 @@ CS.level1.makeTree = function(base_x, base_y){
   return a;
 };
 
-CS.level1.makeKeep = function(x, y){
+CS.level.makeKeep = function(x, y){
   var keep = [
     "                                            ]]]]]]]              ",
     "                                           ]       ]             ",
@@ -59,40 +62,38 @@ CS.level1.makeKeep = function(x, y){
   ].reverse();
   for (var i = 0; i < keep.length; i += 1){
     for (var j = 0; j < keep[0].length; j += 1){
-      if (keep[i][j] === ']') CS.level1.platforms.push({x: x + j, y: y + i, shader: CS.Shaders.STONE});
-      if (keep[i][j] === 't') CS.level1.torches.push({x: x + j, y: y + i, wall: 'left'});
-      if (keep[i][j] === 'T') CS.level1.torches.push({x: x + j, y: y + i, wall: 'left'});
-      CS.level1.nonCollidables.push({x: x + j, y: y + i, z: -1, shader: CS.Shaders.STONE});
-
+      if (keep[i][j] === ']') CS.level.platforms.push({x: x + j, y: y + i, shader: CS.Shaders.STONE});
+      if (keep[i][j] === 't') CS.level.torches.push({x: x + j, y: y + i, wall: 'left'});
+      if (keep[i][j] === 'T') CS.level.torches.push({x: x + j, y: y + i, wall: 'right'});
+      CS.level.nonCollidables.push({x: x + j, y: y + i, z: -1, shader: CS.Shaders.STONE});
     }
   }
 };
 
-CS.level1.create = function(){
+CS.level.create = function(){
   // 100 units of trees in both directions
   var max_mountain_dist = 100;
   var mountain_start = Math.floor(Math.random() * max_mountain_dist);
   var last_tree = 0;
   for (var i = -100 ; i <= mountain_start; i += 1){
-    CS.level1.platforms.push({x: i, y: -15, shader: CS.Shaders.GRASS});
-    if (Math.random() < 0.2){
-      CS.level1.shrooms.push({x: i, y: -14, shader: CS.Shaders.SHROOM });
-
-    }
+    CS.level.platforms.push({x: i, y: -15, shader: CS.Shaders.GRASS});
+    CS.plants.add(i, -14, 'shroom_red', 0.12);
+    CS.plants.add(i, -14, 'shroom_brown', 0.02);
+    CS.plants.add(i, -14, 'weeds', 0.05);
     if (i == -100){
       for (var j = 0; j < 30; j += 1){
-        CS.level1.platforms.push({x: i, y: -15 + j, shader: CS.Shaders.STONE});
+        CS.level.platforms.push({x: i, y: -15 + j, shader: CS.Shaders.STONE});
       }
       continue;
     } else if (i == -99) {
-      CS.level1.torches.push({x: i, y: 0, wall: 'left'});
+      CS.level.torches.push({x: i, y: 0, wall: 'left'});
     }
     var rand = Math.random();
     if (last_tree > 3 && rand < 0.2){
       last_tree = 0;
-      var tree = CS.level1.makeTree(i, -14);
+      var tree = CS.level.makeTree(i, -14);
       for (var j = 0; j < tree.length; j += 1){
-        CS.level1.platforms.push(tree[j]);
+        CS.level.platforms.push(tree[j]);
       }
     }
     last_tree += 1;
@@ -106,15 +107,9 @@ CS.level1.create = function(){
       if (i !== mountain_start + 1 && j === i - mountain_start - 1 && Math.random() < 0.5){
         // Dont draw a block
       } else {
-        CS.level1.platforms.push({x: i, y: j  - 15, shader: CS.Shaders.GRASS});
+        CS.level.platforms.push({x: i, y: j  - 15, shader: CS.Shaders.GRASS});
       }
     }
   }
-  CS.level1.makeKeep(mountain_start + mountain_height, mountain_height - 17);
+  CS.level.makeKeep(mountain_start + mountain_height, mountain_height - 17);
 };
-
-CS.level1.meshes = [];
-
-CS.level1.torches = [];
-
-CS.level1.shrooms = [];
