@@ -2,15 +2,13 @@ window.CS = window.CS || { };
 CS.UNIT = 10;
 
 CS.init = function(){
-  // set the scene size
   var WIDTH = window.innerWidth,
-    HEIGHT = window.innerHeight;
+      HEIGHT = window.innerHeight;
 
-  // set some camera attributes
   var VIEW_ANGLE = 45,
-    ASPECT = WIDTH / HEIGHT,
-    NEAR = 0.1,
-    FAR = 10000;
+      ASPECT = WIDTH / HEIGHT,
+      NEAR = 0.1,
+      FAR = 10000;
 
   CS.stats = new Stats();
   CS.stats.setMode(0);
@@ -19,43 +17,26 @@ CS.init = function(){
   CS.stats.domElement.style.top = '0px';
   document.body.appendChild(CS.stats.domElement);
 
-  // get the DOM element to attach to
-  // - assume we've got jQuery to hand
   var $container = $('#container');
 
-  // create a WebGL renderer, camera
-  // and a scene
   CS.renderer = new THREE.WebGLRenderer();
-  CS.camera =
-    new THREE.PerspectiveCamera(
-      VIEW_ANGLE,
-      ASPECT,
-      NEAR,
-      FAR);
+  CS.camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 
   CS.scene = new THREE.Scene();
-
-  // add the camera to the scene
   CS.scene.add(CS.camera);
 
-  // the camera starts at 0,0,0
-  // so pull it back
   CS.camera.position.x = 50;
   CS.camera.position.y = 10;
   CS.camera.position.z = 320;
 
-  // start the renderer
   CS.renderer.setSize(WIDTH, HEIGHT);
 
-  // attach the render-supplied DOM element
   $container.append(CS.renderer.domElement);
-  var vShader = $('#vertexshader');
-  var fShader = $('#fragmentshader');
 
   CS.level1.create();
   CS.drawArray(CS.level1.platforms, true);
   CS.drawArray(CS.level1.nonCollidables);
-  CS.drawShrooms(CS.level1.shrooms);
+  CS.plants.draw(CS.level1.shrooms);
 
   CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), CS.Shaders.fader);
   CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
@@ -64,6 +45,8 @@ CS.init = function(){
   CS.scene.add(CS.player.mesh);
 
   CS.setupLights();
+  CS.stars.drawParticles();
+  CS.player.init_trail();
 
   CS.renderer.render(CS.scene, CS.camera);
   CS.start();
@@ -119,6 +102,8 @@ CS.animate = function() {
     CS.camera.position.y = CS.player.mesh.position.y;
     CS.camera.position.x = CS.player.mesh.position.x;
     CS.player.collision();
+    CS.player.update_trail();
+    CS.stars.animation();
   }
   CS.stats.update();
   CS.renderer.render(CS.scene, CS.camera);
@@ -138,21 +123,7 @@ CS.drawArray = function(ar){
   }
 };
 
-CS.drawShrooms = function(shrooms){
-  for (var i = 0; i < shrooms.length ; i += 1){
-    var shroom = shrooms[i];
-    var mesh = new THREE.Mesh(new THREE.PlaneGeometry(CS.UNIT, CS.UNIT), CS.Shaders.SHROOM);
-    mesh.position.x = shroom.x*CS.UNIT;
-    mesh.position.y = shroom.y*CS.UNIT;
-    var shroom_width = 4;
-    var rand_side = Math.floor(Math.random() * (shroom_width + 1)) + 5;///2 // for floating pt accuracy
-    mesh.position.z = rand_side;
-    CS.level1.meshes.push(mesh);
-    CS.scene.add(mesh);
-  }
-};
 CS.gameStepTime = 50;
-
 CS.frameTime = 0; // ms
 CS.cumulatedFrameTime = 0; // ms
 CS._lastFrameTime = Date.now(); // timestamp
