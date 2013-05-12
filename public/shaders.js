@@ -58,11 +58,13 @@ CS.Shaders.textures = {
   bark: THREE.ImageUtils.loadTexture( "textures/blocks/tree_jungle.png" ),
   torch: THREE.ImageUtils.loadTexture( "textures/blocks/torch.png" ),
   stone: THREE.ImageUtils.loadTexture( "textures/blocks/stonebrick.png" ),
-  stars: THREE.ImageUtils.loadTexture( "textures/particle.png" )
+  stars: THREE.ImageUtils.loadTexture( "textures/particle.png" ),
+  trail: THREE.ImageUtils.loadTexture("textures/particle.png")
 };
 CS.Shaders.BARK = new THREE.MeshPhongMaterial( { shininess: 0, ambient: 0x333333, color: 0x964B00, specular: 0x222222, map: CS.Shaders.textures.bark });
 CS.Shaders.FOLIAGE = new THREE.MeshPhongMaterial( { shininess: 80, ambient: 0x444444, color: 0x11dd11, specular: 0x222222, map: CS.Shaders.textures.tree });
 CS.Shaders.STONE = new THREE.MeshPhongMaterial( { shininess: 0, ambient: 0x333333, color: 0x964B00, specular: 0x222222, map: CS.Shaders.textures.stone });
 CS.Shaders.GRASS = new THREE.MeshPhongMaterial( { shininess: 80, ambient: 0x444444, color: 0x33dd33, specular: 0x222222, map: CS.Shaders.textures.grass });
 CS.Shaders.TORCH = new THREE.MeshPhongMaterial( { map: CS.Shaders.textures.torch, transparent: true, color: 0xFFFFFF});
-CS.Shaders.STARS = new THREE.MeshPhongMaterial( { map: CS.Shaders.textures.stars, transparent: true, color: 0xFFFFFF});
+CS.Shaders.STARS = new THREE.ParticleBasicMaterial({ color: 0xFFFFFF, size: 20, map: CS.Shaders.textures.trail, blending: THREE.AdditiveBlending, transparent: true });
+CS.Shaders.TRAIL =  new THREE.ParticleBasicMaterial({ color: 0xFFFFFF, size: 2, map: CS.Shaders.textures.trail , blending: THREE.AdditiveBlending, transparent: true });

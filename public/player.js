@@ -21,16 +21,7 @@ var current_tail = 0,
 CS.player.add_to_trail = function(){
   var particleCount = 10,
       particles = new THREE.Geometry(),
-      pMaterial =
-        new THREE.ParticleBasicMaterial({
-          color: 0xFFFFFF,
-          size: 2,
-          map: THREE.ImageUtils.loadTexture(
-            "textures/particle.png"
-          ),
-          blending: THREE.AdditiveBlending,
-          transparent: true
-        });
+      pMaterial = CS.Shaders.TRAIL;
 
   for(var p = 0; p < particleCount; p++) {
     var pX = CS.player.mesh.position.x + Math.random() * 10 - 5,
