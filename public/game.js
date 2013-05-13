@@ -40,7 +40,7 @@ CS.init = function(){
 
   CS.level.create();
   CS.drawArray(CS.level.platforms, true);
-  CS.drawArray(CS.level.nonCollidables);
+  CS.drawArray(CS.level.nonCollidables, false);
   CS.drawPlaneArray(CS.level.torches);
   CS.plants.render();
 
@@ -119,6 +119,8 @@ CS.animate = function() {
 }
 
 CS.drawArray = function(ar, has_collision){
+  var geo = new THREE.Geometry();
+  var prev_shader = 0;
   for (var i = 0; i < ar.length; i++){
     var platform = ar[i];
     var shader = platform.shader || CS.Shaders.standard;
@@ -126,8 +128,23 @@ CS.drawArray = function(ar, has_collision){
     cube.position.x = platform.x*CS.UNIT;
     cube.position.y = platform.y*CS.UNIT;
     cube.position.z = (platform.z || 0)*CS.UNIT;
-    if (has_collision) CS.level.meshes.push(cube);
-    CS.scene.add(cube);
+    if (has_collision != true) {
+      if ( (shader == prev_shader || prev_shader == 0) && i != ar.length -1) {
+        THREE.GeometryUtils.merge(geo, cube);
+      }
+      else {
+        var mergedMesh = new THREE.Mesh(geo, prev_shader);
+        CS.scene.add(mergedMesh);
+        geo = new THREE.Geometry();
+        THREE.GeometryUtils.merge(geo, cube);
+        console.log('added merge');
+      }
+    }
+    else {
+      CS.scene.add(cube);
+      CS.level.meshes.push(cube);
+    }
+    prev_shader = shader;
   }
 };
 
