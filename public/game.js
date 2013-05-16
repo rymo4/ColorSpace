@@ -1,6 +1,4 @@
-window.CS = window.CS || {};
-CS.effects = CS.effects || {};
-
+window.CS = window.CS || { };
 CS.UNIT = 10;
 CS.gameStepTime = 50;
 CS.frameTime = 0;
@@ -38,13 +36,12 @@ CS.init = function(){
 
   CS.renderer.setSize(WIDTH, HEIGHT);
 
+  ////////// POST PROCESSING EFFECTS
   CS.composer = new THREE.EffectComposer(CS.renderer);
   CS.composer.addPass(new THREE.RenderPass(CS.scene, CS.camera));
-  CS.composer.render();
-  //CS.composer.addPass(new THREE.ShaderPass(CS.Shaders.DOT_SCREEN));
-  //CS.composer.addPass(CS.rgbEffect);
-  //CS.effects.setup();
-  //CS.effects.addRandomEffect();
+  CS.effects.setup();
+  CS.copyPass = new THREE.ShaderPass(THREE.CopyShader);
+  CS.composer.addPass(CS.copyPass);
 
   $container.append(CS.renderer.domElement);
 
