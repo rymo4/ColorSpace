@@ -76,4 +76,4 @@ CS.Shaders.SHROOM_RED = new THREE.MeshPhongMaterial( { map: CS.Shaders.textures.
 CS.Shaders.SHROOM_BROWN = new THREE.MeshPhongMaterial( { map: CS.Shaders.textures.shroom_brown, transparent: true});
 CS.Shaders.WEEDS = new THREE.MeshPhongMaterial( { map: CS.Shaders.textures.weeds, transparent: true, color: 0x00FF00});
 CS.Shaders.STARS = new  THREE.ParticleBasicMaterial({ color: 0xFFFFFF, size: 20, map: CS.Shaders.textures.trail, blending: THREE.AdditiveBlending, transparent: true });
-CS.Shaders.TRAIL =  new new THREE.ParticleBasicMaterial({ color: 0xFFFFFF, size: 2, map: CS.Shaders.textures.trail , blending: THREE.AdditiveBlending, transparent: true });
+CS.Shaders.TRAIL =  new THREE.ParticleBasicMaterial({ color: 0xFFFFFF, size: 2, map: CS.Shaders.textures.trail , blending: THREE.AdditiveBlending, transparent: true });
