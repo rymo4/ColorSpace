@@ -119,6 +119,7 @@ CS.animate = function() {
     CS.player.collision();
     CS.player.updateTrail();
     CS.stars.animation();
+    CS.effects.update();
   }
   CS.stats.update();
   CS.composer.render();
