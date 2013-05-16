@@ -148,4 +148,9 @@ CS.drawArray = function(ar, has_collision){
   }
 };
 
-window.addEventListener("load", CS.init);
+$(document).ready(function(){
+  $('#play').click(function(){
+    $('#intro').hide();
+    CS.init();
+  });
+});

@@ -12,6 +12,16 @@
     %script{type: 'text/javascript', src: 'plants.js'}
     %script{type: 'text/javascript', src: 'stars.js'}
     %script{type: 'text/javascript', src: 'game.js'}
+    %link{:href => "http://fonts.googleapis.com/css?family=Marvel:400,700,700italic,400italic", :rel => "stylesheet", :type => "text/css"}/
     %link{rel: 'stylesheet', href: 'styles.css'}
   %body
+    #intro
+      %h1
+        What do your pixels do when you aren't using them?
+        %a#play{href: '#'} Find Out
+        &larr;  &larr;
+      .credits
+        By Ryder Moody and Enrique Cruz. View on
+        %a{href: 'https://github.com/rymo4/ColorSpace'} github.
+
     #container
