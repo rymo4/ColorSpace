@@ -33,7 +33,7 @@ CS.collision_detector.detect = function (object) {
       obstacles = CS.level.meshes;
   var any_collisions = false;
   var col_down = false,
-  	  col_up = false;
+      col_up = false;
   for (var i = 0; i < CS.collision_detector.rays.length; i += 1) {
     CS.collision_detector.caster.set(object.mesh.position, CS.collision_detector.rays[i]);
     collisions = CS.collision_detector.caster.intersectObjects(obstacles);
@@ -74,16 +74,11 @@ CS.collision_detector.detect = function (object) {
       }
     }
   }
-  if (any_collisions){
-    return true;
-  }
-  else {
-  	return false;
-  }
+  return any_collisions;
 };
 
 CS.collision_detector.adjust_for_collision = function (object, col_dir, dist) {
-	if (col_dir === DOWN) {
+  if (col_dir === DOWN) {
       object.falling = false;
       object.direction.y = 0;
       object.mesh.rotation.z = 0;
@@ -110,28 +105,27 @@ CS.collision_detector.adjust_for_collision = function (object, col_dir, dist) {
     else if (col_dir === DOWN_RIGHT || col_dir === DOWN_LEFT) {
       //ADJUST FOR DOWN
       //NO NEED TO ADJUST FOR DOWN AS HE SHOULD STILL BE FALLING
-	  //ADJUST FOR RIGHT
+    //ADJUST FOR RIGHT
       if (col_dir === DOWN_RIGHT) {
-      	console.log('col_down_right');
-      	object.direction.x *= -1;
-      	object.mesh.position.x -= CS.UNIT/5;
+        console.log('col_down_right');
+        object.direction.x *= -1;
+        object.mesh.position.x -= CS.UNIT/5;
       }
       //ADJUST FOR LEFT
       else {
-      	console.log('col_down_left');
-	    object.direction.x *= -1;
-	    object.mesh.position.x += CS.UNIT/5;
+        console.log('col_down_left');
+      object.direction.x *= -1;
+      object.mesh.position.x += CS.UNIT/5;
      }
      //HACK FOR WALL CLIMBING
-     if (object.direction.y > 0){
-     	if (!object.falling){
+    if (object.direction.y > 0){
+      if (!object.falling){
         object.direction.y *= -1;
-     	} else {
+      } else {
         object.falling = false;
         object.direction.y = 0;
         object.mesh.position.y += CS.UNIT;
       }
-
      }
     }
     else if (col_dir === UP_RIGHT || col_dir === UP_LEFT) {
@@ -144,16 +138,16 @@ CS.collision_detector.adjust_for_collision = function (object, col_dir, dist) {
         object.mesh.position.y += CS.UNIT;
       }
       if (col_dir === UP_LEFT) {
-      	console.log('col_up_left');
-      	//ADJUST FOR LEFT
+        console.log('col_up_left');
+        //ADJUST FOR LEFT
         object.direction.x *= -1;
         object.mesh.position.x += CS.UNIT/5;
       }
       else {
-      	console.log('col_up_right');
-	    //ADJUST FOR RIGHT
-	    object.direction.x *= -1;
-	    object.mesh.position.x -= CS.UNIT/5;
-	  }
+        console.log('col_up_right');
+      //ADJUST FOR RIGHT
+      object.direction.x *= -1;
+      object.mesh.position.x -= CS.UNIT/5;
+    }
     }
 };
