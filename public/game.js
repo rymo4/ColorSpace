@@ -44,7 +44,7 @@ CS.init = function(){
   CS.drawPlaneArray(CS.level.torches);
   CS.plants.render();
 
-  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 1, 1, 1), CS.Shaders.fader);
+  CS.player.mesh = new THREE.Mesh(new CS.player.geometry(CS.UNIT, CS.UNIT, CS.UNIT, 20, 20, 20), CS.Shaders.fader);
   CS.player.mesh.position.x = CS.player.position.x * CS.UNIT;
   if (!CS.player.inAir){
     CS.player.mesh.position.y = CS.player.position.y * CS.UNIT;
