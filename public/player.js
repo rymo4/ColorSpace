@@ -136,6 +136,6 @@ CS.player.move = function(){
 };
 
 CS.player.collision = function () {
-  CS.collision_detector.detect(CS.player);
+  CS.player.inAir = !CS.collision_detector.detect(CS.player);
 };
 
