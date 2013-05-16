@@ -1,4 +1,6 @@
-window.CS = window.CS || { };
+window.CS = window.CS || {};
+CS.effects = CS.effects || {};
+
 CS.UNIT = 10;
 CS.gameStepTime = 50;
 CS.frameTime = 0;
@@ -35,6 +37,14 @@ CS.init = function(){
   CS.camera.position.z = 320;
 
   CS.renderer.setSize(WIDTH, HEIGHT);
+
+  CS.composer = new THREE.EffectComposer(CS.renderer);
+  CS.composer.addPass(new THREE.RenderPass(CS.scene, CS.camera));
+  CS.composer.render();
+  //CS.composer.addPass(new THREE.ShaderPass(CS.Shaders.DOT_SCREEN));
+  //CS.composer.addPass(CS.rgbEffect);
+  //CS.effects.setup();
+  //CS.effects.addRandomEffect();
 
   $container.append(CS.renderer.domElement);
 
@@ -114,7 +124,7 @@ CS.animate = function() {
     CS.stars.animation();
   }
   CS.stats.update();
-  CS.renderer.render(CS.scene, CS.camera);
+  CS.composer.render();
   if(!CS.gameOver) window.requestAnimationFrame(CS.animate);
 }
 
