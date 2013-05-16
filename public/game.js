@@ -36,6 +36,13 @@ CS.init = function(){
 
   CS.renderer.setSize(WIDTH, HEIGHT);
 
+  ////////// POST PROCESSING EFFECTS
+  CS.composer = new THREE.EffectComposer(CS.renderer);
+  CS.composer.addPass(new THREE.RenderPass(CS.scene, CS.camera));
+  CS.effects.setup();
+  CS.copyPass = new THREE.ShaderPass(THREE.CopyShader);
+  CS.composer.addPass(CS.copyPass);
+
   $container.append(CS.renderer.domElement);
 
   CS.level.create();
@@ -114,7 +121,7 @@ CS.animate = function() {
     CS.stars.animation();
   }
   CS.stats.update();
-  CS.renderer.render(CS.scene, CS.camera);
+  CS.composer.render();
   if(!CS.gameOver) window.requestAnimationFrame(CS.animate);
 }
 
