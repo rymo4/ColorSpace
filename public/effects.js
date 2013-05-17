@@ -30,7 +30,7 @@ CS.effects.setup = function() {
   CS.effects.all.BLEACH.__needed = [];
 
   CS.effects.all.VIGNETTE = new THREE.ShaderPass(CS.Shaders.VIGNETTE);
-  CS.effects.all.VIGNETTE.uniforms.darkness.value = 3.0;
+  CS.effects.all.VIGNETTE.uniforms.darkness.value = 2.0;
   CS.effects.all.VIGNETTE.renderToScreen = true;
   CS.composer.addPass(CS.effects.all.VIGNETTE);
 };
