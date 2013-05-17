@@ -48,5 +48,6 @@ CS.plants.draw_plant = function(plants, type, index){
   var rand_side = Math.floor(Math.random() * (CS.UNIT + 1)) + z_centered_around;
   mesh.position.z = rand_side;
   CS.level.meshes.push(mesh);
+  CS.plants.meshes.push(mesh);
   CS.scene.add(mesh);
 };
