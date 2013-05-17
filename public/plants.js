@@ -22,16 +22,30 @@ CS.plants.render = function(){
   }
 };
 
-CS.plants.draw = function(plants, type){
+CS.plants.draw = function(plants, type) {
   for (var i = 0; i < plants.length; i += 1){
-    var shroom = plants[i];
-    var mesh = new THREE.Mesh(new THREE.PlaneGeometry(CS.UNIT, CS.UNIT), CS.Shaders[type.toUpperCase()]);
-    mesh.position.x = shroom.x * CS.UNIT;
-    mesh.position.y = shroom.y * CS.UNIT;
-    var z_centered_around = CS.UNIT / 2;
-    var rand_side = Math.floor(Math.random() * (CS.UNIT + 1)) + z_centered_around;
-    mesh.position.z = rand_side;
-    CS.level.meshes.push(mesh);
-    CS.scene.add(mesh);
+    CS.plants.draw_plant(plants, type, i);
   }
+};
+
+CS.plants.spawn_random_plant = function(type) {
+  for (var i = 0; i < CS.level.plantTypes.length; i++){
+    if (CS.level.plantTypes[i] === type) {
+      var plants = CS.level.plants[type];
+      var index = Math.floor(Math.random() * plants.length);
+      CS.plants.draw_plant(plants, type, index);
+    }
+  }
+};
+
+CS.plants.draw_plant = function(plants, type, index){
+  var shroom = plants[index];
+  var mesh = new THREE.Mesh(new THREE.PlaneGeometry(CS.UNIT, CS.UNIT), CS.Shaders[type.toUpperCase()]);
+  mesh.position.x = shroom.x * (Math.random() - 0.5)* 30 * CS.UNIT;
+  mesh.position.y = shroom.y * CS.UNIT;
+  var z_centered_around = CS.UNIT / 2;
+  var rand_side = Math.floor(Math.random() * (CS.UNIT + 1)) + z_centered_around;
+  mesh.position.z = rand_side;
+  CS.level.meshes.push(mesh);
+  CS.scene.add(mesh);
 };

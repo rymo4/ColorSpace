@@ -87,7 +87,7 @@ CS.collision_detector.adjust_for_collision = function (object, col_dir, dist) {
       object.falling = false;
       object.direction.y = 0;
       object.mesh.rotation.z = 0;
-      object.mesh.position.y += (CS.UNIT - dist - 3.9);
+      object.mesh.position.y += (CS.UNIT - dist - 4.2);
     }
     else if (col_dir === UP) {
       if (!object.falling){
