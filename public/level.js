@@ -70,6 +70,12 @@ CS.level.makeKeep = function(x, y){
   }
 };
 
+CS.level.spawn_shroom = function () {
+  console.log('spawning shroom');
+  CS.plants.spawn_random_plant('shroom_red');
+  CS.plants.spawn_random_plant('shroom_brown');
+}
+
 CS.level.create = function(){
   // 100 units of trees in both directions
   var max_mountain_dist = 100;

@@ -66,6 +66,8 @@ CS.init = function(){
   CS.stars.drawParticles();
   CS.player.initTrail();
 
+  var loop_handle= setInterval(CS.level.spawn_shroom, 5000);
+
   CS.renderer.render(CS.scene, CS.camera);
   CS.start();
 };
