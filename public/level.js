@@ -58,6 +58,7 @@ CS.level.makeKeep = function(x, y){
     "    ]           ]        ]                                      ]",
     "                ]        ]                                      ]",
     "                ]        ]                                      ]",
+    "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]",
     "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]"
   ].reverse();
   for (var i = 0; i < keep.length; i += 1){
@@ -83,6 +84,7 @@ CS.level.create = function(){
   var last_tree = 0;
   for (var i = -100 ; i <= mountain_start; i += 1){
     CS.level.platforms.push({x: i, y: -15, shader: CS.Shaders.GRASS});
+    CS.level.platforms.push({x: i, y: -16, shader: CS.Shaders.GRASS});
     CS.plants.add(i, -14, 'shroom_red', 0.12);
     CS.plants.add(i, -14, 'shroom_brown', 0.02);
     CS.plants.add(i, -14, 'weeds', 0.05);
@@ -113,9 +115,9 @@ CS.level.create = function(){
       if (i !== mountain_start + 1 && j === i - mountain_start - 1 && Math.random() < 0.5){
         // Dont draw a block
       } else {
-        CS.level.platforms.push({x: i, y: j  - 15, shader: CS.Shaders.GRASS});
+        CS.level.platforms.push({x: i, y: j  - 16, shader: CS.Shaders.GRASS});
       }
     }
   }
-  CS.level.makeKeep(mountain_start + mountain_height, mountain_height - 17);
+  CS.level.makeKeep(mountain_start + mountain_height, mountain_height - 18);
 };
