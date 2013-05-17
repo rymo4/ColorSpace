@@ -79,6 +79,8 @@ CS.collision_detector.detect = function (object) {
 
 CS.collision_detector.adjust_for_collision = function (object, col_dir, dist) {
   if (col_dir === DOWN) {
+    object.inAir = false;
+    // Check if 
     object.falling = false;
     object.direction.y = 0;
     object.mesh.rotation.z = 0;

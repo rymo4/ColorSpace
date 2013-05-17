@@ -9,6 +9,7 @@ CS.player.weight = 10;
 CS.player.inAir = false;
 CS.player.falling = false;
 CS.player.heightInAir = 0;
+CS.player.points = 0;
 
 CS.player.trail = [];
 CS.player.trailS = [];
@@ -137,5 +138,21 @@ CS.player.move = function(){
 
 CS.player.collision = function () {
   CS.player.inAir = !CS.collision_detector.detect(CS.player);
+  if (CS.player.direction.y < 0){
+    for (var i = 0; i < CS.plants.meshes.length; i++){
+      var plant = CS.plants.meshes[i];
+      if (Math.abs(plant.position.x - CS.player.mesh.position.x) < CS.UNIT
+          && Math.abs(plant.position.y - CS.player.mesh.position.y) < CS.UNIT){
+        CS.effects.addRandomEffect();
+        CS.scene.remove(plant);
+        CS.player.addPoint();
+      }
+    }
+  }
+};
+
+CS.player.addPoint = function(){
+  CS.player.points += 1;
+  $('#points').text('Points: ' + CS.player.points);
 };
 

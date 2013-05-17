@@ -3,6 +3,7 @@ CS.level = CS.level || {};
 CS.plants = CS.plants || {};
 CS.level.plants = CS.level.plants || {};
 CS.level.plantTypes = [];
+CS.plants.meshes = [];
 
 CS.plants.add = function(x, y, type, probability){
   if (!CS.level.plants[type]){
@@ -32,6 +33,7 @@ CS.plants.draw = function(plants, type){
     var rand_side = Math.floor(Math.random() * (CS.UNIT + 1)) + z_centered_around;
     mesh.position.z = rand_side;
     CS.level.meshes.push(mesh);
+    CS.plants.meshes.push(mesh);
     CS.scene.add(mesh);
   }
 };
