@@ -6,6 +6,9 @@
 }
 #points {
   height: 50px;
+  margin-left: 10px;
+  margin-top: 10px;
+  font-size: 20px;
 }
 
 #intro {
