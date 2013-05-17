@@ -12,7 +12,7 @@ CS.effects.setup = function() {
   CS.effects.all.DOT_SCREEN_SHADER.__needed = ['scale'];
 
   CS.effects.all.RGB_SHIFTER = new THREE.ShaderPass(CS.Shaders.RGB_SHIFTER);
-  CS.effects.all.RGB_SHIFTER.uniforms.amount.value = 0.0015;
+  CS.effects.all.RGB_SHIFTER.uniforms.amount.value = 0.15;
   CS.effects.all.RGB_SHIFTER.__needed = ['amount'];
 
   CS.effects.all.FILM = new THREE.ShaderPass(CS.Shaders.FILM);
@@ -31,9 +31,6 @@ CS.effects.addRandomEffect = function() {
   CS.composer = new THREE.EffectComposer(CS.renderer);
   CS.composer.addPass(new THREE.RenderPass(CS.scene, CS.camera));
   var effect_name = CS.effects.list[Math.floor(Math.random() * CS.effects.list.length)];
-  //for (var i = 0; i < CS.effects.activeEffects.length; i++){
-  //  CS.composer.addPass(CS.effects.all[CS.effects.activeEffects[i]]);
-  //}
   CS.composer.addPass(
     CS.effects.all[effect_name]
   );
@@ -52,11 +49,10 @@ CS.effects.update = function(){
     var to_update = effect.__needed;
     for (var j = 0; j < to_update.length; j++){
       var attr = to_update[j];
-      if (attr === time){
+      if (attr === 'time'){
         effect.uniforms[attr].value = Date.now();
       } else {
-        // TODO: Use range and better function
-        //effect.uniforms[attr].value *= 1.00001;
+        effect.uniforms[attr].value += 0.1 * Math.sin(Date.now());
       }
     }
 

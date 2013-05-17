@@ -3,6 +3,7 @@ CS.level = CS.level || {};
 CS.plants = CS.plants || {};
 CS.level.plants = CS.level.plants || {};
 CS.level.plantTypes = [];
+CS.plants.meshes = [];
 
 CS.plants.add = function(x, y, type, probability){
   if (!CS.level.plants[type]){

@@ -17,12 +17,15 @@ CS.init = function(){
 
   CS.stats = new Stats();
   CS.stats.setMode(0);
+  /*
   CS.stats.domElement.style.position = 'absolute';
   CS.stats.domElement.style.left = '0px';
   CS.stats.domElement.style.top = '0px';
   document.body.appendChild(CS.stats.domElement);
+  */
 
   var $container = $('#container');
+  $container.show();
 
   CS.renderer = new THREE.WebGLRenderer();
   CS.camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -121,6 +124,7 @@ CS.animate = function() {
     CS.player.collision();
     CS.player.updateTrail();
     CS.stars.animation();
+    CS.effects.update();
   }
   CS.stats.update();
   CS.composer.render();
@@ -158,6 +162,7 @@ CS.drawArray = function(ar, has_collision){
 };
 
 $(document).ready(function(){
+  $('#container').hide();
   $('#play').click(function(){
     $('#intro').hide();
     CS.init();

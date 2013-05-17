@@ -105,7 +105,7 @@ CS.Shaders.FILM = {
     "nIntensity": { type: "f", value: 0.5 },
     "sIntensity": { type: "f", value: 0.05 },
     "sCount":     { type: "f", value: 4096 },
-    "grayscale":  { type: "i", value: 1 }
+    "grayscale":  { type: "i", value: 0 }
   },
   vertexShader: [
     "varying vec2 vUv;",
