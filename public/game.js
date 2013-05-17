@@ -164,6 +164,7 @@ CS.drawArray = function(ar, has_collision){
 $(document).ready(function(){
   $('#container').hide();
   $('#play').click(function(){
+    $('body').css('background', '#000');
     $('#intro').hide();
     CS.init();
   });
